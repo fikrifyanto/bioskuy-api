@@ -1,0 +1,1253 @@
+openapi: 3.0.3
+info:
+  title: Bioskuy API
+  description: API for Bioskuy movie ticket booking system
+  version: 1.0.0
+tags:
+  - name: Users
+    description: User management operations
+  - name: Movies
+    description: Movie management operations
+  - name: Theaters
+    description: Theater management operations
+  - name: Schedules
+    description: Showing schedule operations
+  - name: Seats
+    description: Seat management operations
+  - name: Bookings
+    description: Booking management operations
+  - name: Payments
+    description: Payment processing operations
+  - name: Tickets
+    description: Ticket management operations
+paths:
+  /users:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              id: 1
+              name: "John Doe"
+              email: "john.doe@example.com"
+              password: "securePassword123"
+              phoneNumber: "+1234567890"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+              example:
+                message: "User created successfully"
+                data:
+                  id: 1
+                  name: "John Doe"
+                  email: "john.doe@example.com"
+                  phoneNumber: "+1234567890"
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Invalid input: Email is already in use"
+                data: null
+  /users/me:
+    get:
+      summary: Get current logged in user
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+              example:
+                message: "Current user retrieved successfully"
+                data:
+                  name: "John Doe"
+                  email: "john.doe@example.com"
+                  phoneNumber: "+1234567890"
+        '404':
+          description: Current user not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Current user not found: User not found with email: example@email.com"
+                data: null
+  /users/{id}:
+    put:
+      summary: Update user profile
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              id: 1
+              name: "John Doe"
+              email: "john.doe@example.com"
+              password: "securePassword123"
+              phoneNumber: "+1234567890"
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+                example:
+                  message: "User updated successfully"
+                  data:
+                    id: 1
+                    name: "John Doe"
+                    email: "john.doe@example.com"
+                    password: "securePassword123"
+                    phoneNumber: "+1234567890"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                example:
+                  message: "User not found"
+                  data: null
+  /users/login:
+    post:
+      summary: User login
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            example:
+              email: "john.doe@example.com"
+              password: "securePassword123"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+              example:
+                message: "Login successful"
+                data:
+                  id: 1
+                  name: "John Doe"
+                  email: "john.doe@example.com"
+                  phoneNumber: "+1234567890"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Invalid credentials: Email or password is incorrect"
+                data: null
+  /users/logout:
+    post:
+      summary: User logout
+      tags:
+        - Users
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token in the format "Bearer {token}"
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Logout successful"
+                data: null
+        '400':
+          description: No authentication token provided
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "No authentication token provided"
+                data: null
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "An error occurred during logout: {error message}"
+                data: null
+  /movies:
+    get:
+      summary: Get all movies
+      tags:
+        - Movies
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Movie'
+              example:
+                message: "Movies retrieved successfully"
+                data:
+                  - id: 1
+                    title: "Avengers: Endgame"
+                    genre: "Action, Adventure, Sci-Fi"
+                    duration: 181
+                    rating: 8.4
+                  - id: 2
+                    title: "The Shawshank Redemption"
+                    genre: "Drama"
+                    duration: 142
+                    rating: 9.3
+  /movies/{id}:
+    get:
+      summary: Get movie details by ID
+      tags:
+        - Movies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Movie'
+              example:
+                message: "Movie retrieved successfully"
+                data:
+                  id: 1
+                  title: "Avengers: Endgame"
+                  genre: "Action, Adventure, Sci-Fi"
+                  duration: 181
+                  rating: 8.4
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Movie with ID 999 not found"
+                data: null
+  /theaters:
+    get:
+      summary: Get all theaters
+      tags:
+        - Theaters
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Theater'
+              example:
+                message: "Theaters retrieved successfully"
+                data:
+                  - id: 1
+                    name: "Cinema 1"
+                    location: "Downtown Mall, 1st Floor"
+                  - id: 2
+                    name: "Cinema 2"
+                    location: "Downtown Mall, 2nd Floor"
+                  - id: 3
+                    name: "IMAX Theater"
+                    location: "Central Plaza, 3rd Floor"
+  /theaters/movie/{id}:
+    get:
+      summary: Get theaters by movie ID
+      tags:
+        - Theaters
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Theater'
+              example:
+                message: "Theaters for movie retrieved successfully"
+                data:
+                  - id: 1
+                    name: "Cinema 1"
+                    location: "Downtown Mall, 1st Floor"
+                  - id: 2
+                    name: "Cinema 2"
+                    location: "Downtown Mall, 2nd Floor"
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Movie with ID 999 not found"
+                data: null
+  /schedules:
+    get:
+      summary: Get all showing schedules
+      tags:
+        - Schedules
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ShowingSchedule'
+              example:
+                message: "Schedules retrieved successfully"
+                data:
+                  - id: 1
+                    movie:
+                      id: 1
+                      title: "Avengers: Endgame"
+                    theater:
+                      id: 1
+                      name: "Cinema 1"
+                    showingDate: "2023-06-15"
+                    showingTime: "14:30:00"
+                    ticketPrice: 10.50
+                  - id: 2
+                    movie:
+                      id: 1
+                      title: "Avengers: Endgame"
+                    theater:
+                      id: 2
+                      name: "Cinema 2"
+                    showingDate: "2023-06-15"
+                    showingTime: "19:30:00"
+                    ticketPrice: 12.50
+                  - id: 3
+                    movie:
+                      id: 2
+                      title: "The Shawshank Redemption"
+                    theater:
+                      id: 3
+                      name: "IMAX Theater"
+                    showingDate: "2023-06-16"
+                    showingTime: "18:00:00"
+                    ticketPrice: 15.00
+  /schedules/theater/{id}:
+    get:
+      summary: Get schedules by theater ID
+      tags:
+        - Schedules
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ShowingSchedule'
+              example:
+                message: "Schedules for theater retrieved successfully"
+                data:
+                  - id: 2
+                    movie:
+                      id: 1
+                      title: "Avengers: Endgame"
+                    theater:
+                      id: 2
+                      name: "Cinema 2"
+                    showingDate: "2023-06-15"
+                    showingTime: "19:30:00"
+                    ticketPrice: 12.50
+                  - id: 5
+                    movie:
+                      id: 3
+                      title: "Inception"
+                    theater:
+                      id: 2
+                      name: "Cinema 2"
+                    showingDate: "2023-06-17"
+                    showingTime: "20:00:00"
+                    ticketPrice: 12.00
+        '404':
+          description: Theater not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Theater with ID 999 not found"
+                data: null
+  /seats/schedule/{id}:
+    get:
+      summary: Get seats by schedule ID
+      tags:
+        - Seats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Seat'
+              example:
+                message: "Seats for schedule retrieved successfully"
+                data:
+                  - id: 45
+                    seatNumber: "F7"
+                    status: "SOLD"
+                  - id: 46
+                    seatNumber: "F8"
+                    status: "SOLD"
+                  - id: 47
+                    seatNumber: "F9"
+                    status: "AVAILABLE"
+        '404':
+          description: Schedule not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Schedule with ID 999 not found"
+                data: null
+  /bookings:
+    get:
+      summary: Get all bookings
+      tags:
+        - Bookings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+              example:
+                message: "Bookings retrieved successfully"
+                data:
+                  - id: 123
+                    user:
+                      id: 1
+                      name: "John Doe"
+                    showingSchedule:
+                      id: 5
+                      movie:
+                        id: 3
+                        title: "Avengers: Endgame"
+                      theater:
+                        id: 2
+                        name: "Cinema 2"
+                      showingDate: "2023-06-15"
+                      showingTime: "19:30:00"
+                      ticketPrice: 12.50
+                    selectedSeats:
+                      - id: 45
+                        seatNumber: "F7"
+                        status: "RESERVED"
+                      - id: 46
+                        seatNumber: "F8"
+                        status: "RESERVED"
+                    bookingDateTime: "2023-06-10T14:30:45Z"
+                    totalPrice: 25.00
+                    paymentStatus: "PENDING"
+                  - id: 124
+                    user:
+                      id: 2
+                      name: "Jane Smith"
+                    showingSchedule:
+                      id: 3
+                      movie:
+                        id: 2
+                        title: "The Shawshank Redemption"
+                      theater:
+                        id: 3
+                        name: "IMAX Theater"
+                      showingDate: "2023-06-16"
+                      showingTime: "18:00:00"
+                      ticketPrice: 15.00
+                    selectedSeats:
+                      - id: 60
+                        seatNumber: "H4"
+                        status: "RESERVED"
+                    bookingDateTime: "2023-06-11T09:15:22Z"
+                    totalPrice: 15.00
+                    paymentStatus: "PAID"
+    post:
+      summary: Create a new booking
+      tags:
+        - Bookings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+            example:
+              user:
+                id: 1
+              showingSchedule:
+                id: 5
+                movie:
+                  id: 3
+                  title: "Avengers: Endgame"
+                theater:
+                  id: 2
+                  name: "Cinema 2"
+                showingDate: "2023-06-15"
+                showingTime: "19:30:00"
+                ticketPrice: 12.50
+              selectedSeats:
+                - id: 45
+                  seatNumber: "F7"
+                  status: "AVAILABLE"
+                - id: 46
+                  seatNumber: "F8"
+                  status: "AVAILABLE"
+              totalPrice: 25.00
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Booking'
+              example:
+                message: "Booking created successfully"
+                data:
+                  id: 123
+                  user:
+                    id: 1
+                    name: "John Doe"
+                  showingSchedule:
+                    id: 5
+                    movie:
+                      id: 3
+                      title: "Avengers: Endgame"
+                    theater:
+                      id: 2
+                      name: "Cinema 2"
+                    showingDate: "2023-06-15"
+                    showingTime: "19:30:00"
+                    ticketPrice: 12.50
+                  selectedSeats:
+                    - id: 45
+                      seatNumber: "F7"
+                      status: "RESERVED"
+                    - id: 46
+                      seatNumber: "F8"
+                      status: "RESERVED"
+                  bookingDateTime: "2023-06-10T14:30:45Z"
+                  totalPrice: 25.00
+                  paymentStatus: "PENDING"
+  /bookings/{id}:
+    get:
+      summary: Get booking details by ID
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Booking'
+              example:
+                message: "Booking retrieved successfully"
+                data:
+                  id: 123
+                  user:
+                    id: 1
+                    name: "John Doe"
+                  showingSchedule:
+                    id: 5
+                    movie:
+                      id: 3
+                      title: "Avengers: Endgame"
+                    theater:
+                      id: 2
+                      name: "Cinema 2"
+                    showingDate: "2023-06-15"
+                    showingTime: "19:30:00"
+                    ticketPrice: 12.50
+                  selectedSeats:
+                    - id: 45
+                      seatNumber: "F7"
+                      status: "RESERVED"
+                    - id: 46
+                      seatNumber: "F8"
+                      status: "RESERVED"
+                  bookingDateTime: "2023-06-10T14:30:45Z"
+                  totalPrice: 25.00
+                  paymentStatus: "PENDING"
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Booking with ID 999 not found"
+                data: null
+    delete:
+      summary: Cancel a booking
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Booking cancelled successfully"
+                data: null
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Booking with ID 999 not found"
+                data: null
+  /payments:
+    post:
+      summary: Process a payment
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+            example:
+              booking:
+                id: 123
+              paymentMethod: "CREDIT_CARD"
+              amountPaid: 25.00
+      responses:
+        '201':
+          description: Payment processed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Payment'
+              example:
+                message: "Payment processed successfully"
+                data:
+                  id: 456
+                  booking:
+                    id: 123
+                  paymentMethod: "CREDIT_CARD"
+                  paymentDateTime: "2023-06-10T14:35:22Z"
+                  amountPaid: 25.00
+                  status: "PAID"
+  /payments/{id}:
+    get:
+      summary: Get payment details by ID
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Payment'
+              example:
+                message: "Payment retrieved successfully"
+                data:
+                  id: 456
+                  booking:
+                    id: 123
+                    user:
+                      id: 1
+                      name: "John Doe"
+                  paymentMethod: "CREDIT_CARD"
+                  paymentDateTime: "2023-06-10T14:35:22Z"
+                  amountPaid: 25.00
+                  status: "PAID"
+        '404':
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Payment with ID 999 not found"
+                data: null
+    put:
+      summary: Verify a payment
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Payment verified successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Payment'
+              example:
+                message: "Payment verified successfully"
+                data:
+                  id: 456
+                  booking:
+                    id: 123
+                  paymentMethod: "CREDIT_CARD"
+                  paymentDateTime: "2023-06-10T14:35:22Z"
+                  amountPaid: 25.00
+                  status: "PAID"
+        '404':
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Payment with ID 999 not found"
+                data: null
+  /tickets:
+    get:
+      summary: Get all tickets
+      tags:
+        - Tickets
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Ticket'
+              example:
+                message: "Tickets retrieved successfully"
+                data:
+                  - id: 201
+                    booking:
+                      id: 123
+                      user:
+                        id: 1
+                        name: "John Doe"
+                      showingSchedule:
+                        id: 5
+                        movie:
+                          id: 3
+                          title: "Avengers: Endgame"
+                        showingDate: "2023-06-15"
+                        showingTime: "19:30:00"
+                    seat:
+                      id: 45
+                      seatNumber: "F7"
+                      status: "SOLD"
+                    uniqueCode: "AVENG-F7-20230615"
+                  - id: 202
+                    booking:
+                      id: 123
+                      user:
+                        id: 1
+                        name: "John Doe"
+                      showingSchedule:
+                        id: 5
+                        movie:
+                          id: 3
+                          title: "Avengers: Endgame"
+                        showingDate: "2023-06-15"
+                        showingTime: "19:30:00"
+                    seat:
+                      id: 46
+                      seatNumber: "F8"
+                      status: "SOLD"
+                    uniqueCode: "AVENG-F8-20230615"
+  /tickets/{id}:
+    get:
+      summary: Get ticket details by ID
+      tags:
+        - Tickets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Ticket'
+              example:
+                message: "Ticket retrieved successfully"
+                data:
+                  id: 201
+                  booking:
+                    id: 123
+                    user:
+                      id: 1
+                      name: "John Doe"
+                    showingSchedule:
+                      id: 5
+                      movie:
+                        id: 3
+                        title: "Avengers: Endgame"
+                      theater:
+                        id: 2
+                        name: "Cinema 2"
+                      showingDate: "2023-06-15"
+                      showingTime: "19:30:00"
+                  seat:
+                    id: 45
+                    seatNumber: "F7"
+                    status: "SOLD"
+                  uniqueCode: "AVENG-F7-20230615"
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Ticket with ID 999 not found"
+                data: null
+  /tickets/{id}/print:
+    post:
+      summary: Print a ticket
+      tags:
+        - Tickets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ticket printed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Ticket printed successfully"
+                data:
+                  id: 201
+                  printDateTime: "2023-06-14T10:25:30Z"
+                  printStatus: "SUCCESS"
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                message: "Ticket with ID 999 not found"
+                data: null
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          nullable: true
+          oneOf:
+              - type: array
+              - type: object
+      required:
+        - message
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: string
+      required:
+        - name
+        - email
+        - password
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        genre:
+          type: string
+        duration:
+          type: integer
+        rating:
+          type: number
+          format: double
+      required:
+        - title
+        - genre
+        - duration
+    Theater:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        location:
+          type: string
+      required:
+        - name
+        - location
+    ShowingSchedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        movie:
+          $ref: '#/components/schemas/Movie'
+        theater:
+          $ref: '#/components/schemas/Theater'
+        showingDate:
+          type: string
+          format: date
+        showingTime:
+          type: string
+          format: time
+        ticketPrice:
+          type: number
+          format: double
+      required:
+        - movie
+        - theater
+        - showingDate
+        - showingTime
+        - ticketPrice
+    SeatStatus:
+      type: string
+      enum:
+        - AVAILABLE
+        - RESERVED
+        - SOLD
+    Seat:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        seatNumber:
+          type: string
+        status:
+          $ref: '#/components/schemas/SeatStatus'
+      required:
+        - seatNumber
+        - status
+    PaymentStatus:
+      type: string
+      enum:
+        - PENDING
+        - AWAITING_CONFIRMATION
+        - PAID
+        - CANCELLED
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user:
+          $ref: '#/components/schemas/User'
+        showingSchedule:
+          $ref: '#/components/schemas/ShowingSchedule'
+        selectedSeats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seat'
+        bookingDateTime:
+          type: string
+          format: date-time
+        totalPrice:
+          type: number
+          format: double
+        paymentStatus:
+          $ref: '#/components/schemas/PaymentStatus'
+      required:
+        - user
+        - showingSchedule
+        - selectedSeats
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        booking:
+          $ref: '#/components/schemas/Booking'
+        paymentMethod:
+          type: string
+        paymentDateTime:
+          type: string
+          format: date-time
+        amountPaid:
+          type: number
+          format: double
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+      required:
+        - booking
+        - paymentMethod
+        - amountPaid
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        booking:
+          $ref: '#/components/schemas/Booking'
+        seat:
+          $ref: '#/components/schemas/Seat'
+        uniqueCode:
+          type: string
+      required:
+        - booking
+        - seat
+        - uniqueCode
