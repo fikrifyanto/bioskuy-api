@@ -4,7 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.io.Decoders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for JWT token operations.
@@ -24,11 +28,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
     // Token validity duration in milliseconds (24 hours)
     private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000;
 
-    // Set to store blocklisted tokens
-    private final Set<String> blacklistedTokens = ConcurrentHashMap.newKeySet();
+    // Map to store blocklisted tokens with their expiration dates
+    private final Map<String, Date> blacklistedTokens = new ConcurrentHashMap<>();
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -159,7 +165,7 @@ public class JwtUtil {
      * @return true if the token is blocklisted, false otherwise
      */
     public boolean isTokenBlacklisted(String token) {
-        return blacklistedTokens.contains(token);
+        return blacklistedTokens.containsKey(token);
     }
 
     /**
@@ -168,6 +174,33 @@ public class JwtUtil {
      * @param token JWT token to blacklist
      */
     public void blacklistToken(String token) {
-        blacklistedTokens.add(token);
+        try {
+            Date expiry = extractExpiration(token);
+            blacklistedTokens.put(token, expiry);
+            logger.info("Token blacklisted successfully. Expires at: {}", expiry);
+        } catch (Exception e) {
+            logger.error("Error blacklisting token", e);
+        }
+    }
+
+    /**
+     * Scheduled task to clean up expired tokens from the blacklist
+     * Runs every hour
+     */
+    @Scheduled(fixedRate = 3600000) // Run every hour
+    public void cleanupExpiredTokens() {
+        logger.info("Starting cleanup of expired blacklisted tokens");
+        Date now = new Date();
+
+        // Remove expired tokens
+        Set<String> expiredTokens = blacklistedTokens.entrySet().stream()
+                .filter(entry -> entry.getValue().before(now))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+
+        expiredTokens.forEach(blacklistedTokens::remove);
+
+        logger.info("Blacklisted tokens cleanup completed. Removed {} expired tokens. Current size: {}", 
+                expiredTokens.size(), blacklistedTokens.size());
     }
 }

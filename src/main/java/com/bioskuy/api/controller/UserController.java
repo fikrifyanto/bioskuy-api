@@ -159,6 +159,9 @@ public class UserController {
                 // Blocklist the token
                 jwtUtil.blacklistToken(token);
 
+                // Clear the security context
+                SecurityContextHolder.clearContext();
+
                 return ResponseEntity.ok(ResponseUtil.success("Logout successful"));
             }
 
