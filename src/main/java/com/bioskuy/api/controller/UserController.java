@@ -40,7 +40,7 @@ public class UserController {
     }
 
     /**
-     * Get current logged-in user
+     * Get the current logged-in user
      * 
      * @return ResponseEntity with ApiResponse containing the current user
      */
