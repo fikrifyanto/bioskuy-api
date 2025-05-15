@@ -249,7 +249,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Logout successful"));
 
-        // Verify that the token was blacklisted
+        // Verify that the token was blocklisted
         verify(jwtUtil).blacklistToken(token);
     }
 

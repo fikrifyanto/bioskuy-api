@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/users/login").permitAll()
                 .requestMatchers("/users").permitAll() // Allow user registration
                 .requestMatchers("/users/logout").permitAll() // Allow logout without authentication
+                .requestMatchers("/users/refresh-token").permitAll() // Allow token refresh without authentication
                 // Secured endpoints
                 .anyRequest().authenticated()
             );

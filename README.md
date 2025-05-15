@@ -20,7 +20,7 @@ All API responses in this application follow a standardized format with a `messa
 
 1. **ApiResponse Class**: A generic wrapper class for all API responses.
    - Location: `src/main/java/com/bioskuy/api/common/ApiResponse.java`
-   - Usage: Wrap all response data in this class to ensure consistent format.
+   - Usage: Wrap all response data in this class to ensure a consistent format.
 
 2. **ResponseUtil Class**: Utility methods for creating standardized API responses.
    - Location: `src/main/java/com/bioskuy/api/common/ResponseUtil.java`

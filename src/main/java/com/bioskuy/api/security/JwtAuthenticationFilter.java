@@ -37,22 +37,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String email = null;
         String jwt = null;
 
         // Check if the Authorization header exists and starts with "Bearer"
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = jwtUtil.extractUsername(jwt);
+                email = jwtUtil.extractEmail(jwt);
             } catch (Exception e) {
-                logger.error("Error extracting username from token", e);
+                logger.error("Error extracting email from token", e);
             }
         }
 
-        // If the username is extracted and no authentication exists in the context
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        // If the email is extracted and no authentication exists in the context
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
             // Validate the token
             if (jwtUtil.validateToken(jwt, userDetails)) {

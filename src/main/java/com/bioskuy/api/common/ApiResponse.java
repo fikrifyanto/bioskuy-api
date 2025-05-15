@@ -15,12 +15,6 @@ public class ApiResponse<T> {
     private T data;
 
     /**
-     * Default constructor
-     */
-    public ApiResponse() {
-    }
-
-    /**
      * Constructor with message and data
      * 
      * @param message Response message

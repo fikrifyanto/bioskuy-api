@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
+
 /**
  * Controller for user-related endpoints.
  * Implements the User API as defined in the OpenAPI specification.
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     /**
-     * Get current logged in user
+     * Get current logged-in user
      * 
      * @return ResponseEntity with ApiResponse containing the current user
      */
@@ -125,8 +127,11 @@ public class UserController {
             // Get user from service
             User user = userService.getUserByEmail(loginRequest.getEmail());
 
-            // Create a JWT response
-            JwtResponse jwtResponse = new JwtResponse(token, user.withoutPassword());
+            // Get token expiration date
+            Date expiresAt = jwtUtil.getExpirationDate(token);
+
+            // Create a JWT response with an expiration date
+            JwtResponse jwtResponse = new JwtResponse(token, user.withoutPassword(), expiresAt);
 
             return ResponseEntity.ok(ResponseUtil.success("Login successful", jwtResponse));
         } catch (BadCredentialsException e) {
@@ -162,6 +167,63 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResponseUtil.error("An error occurred during logout: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Refresh JWT token
+     * 
+     * @param authHeader Authorization header containing the JWT token
+     * @return ResponseEntity with ApiResponse containing the new JWT token
+     */
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<JwtResponse>> refreshToken(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            // Extract token from the Authorization header
+            if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+
+                // Check if the token is blocklisted
+                if (jwtUtil.isTokenBlacklisted(token)) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(ResponseUtil.error("Invalid token: Token has been revoked"));
+                }
+
+                // Extract email from a token
+                String email = jwtUtil.extractEmail(token);
+
+                // Check if the token is expired
+                if (jwtUtil.extractExpiration(token).before(new Date())) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(ResponseUtil.error("Token has expired"));
+                }
+
+                // Get user details
+                UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+                // Generate new token
+                String newToken = jwtUtil.generateToken(userDetails);
+
+                // Get user from service
+                User user = userService.getUserByEmail(email);
+
+                // Get token expiration date
+                Date expiresAt = jwtUtil.getExpirationDate(newToken);
+
+                // Create a JWT response with an expiration date
+                JwtResponse jwtResponse = new JwtResponse(newToken, user.withoutPassword(), expiresAt);
+
+                // Blocklist the old token
+                jwtUtil.blacklistToken(token);
+
+                return ResponseEntity.ok(ResponseUtil.success("Token refreshed successfully", jwtResponse));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseUtil.error("No authentication token provided"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("An error occurred during token refresh: " + e.getMessage()));
         }
     }
 }

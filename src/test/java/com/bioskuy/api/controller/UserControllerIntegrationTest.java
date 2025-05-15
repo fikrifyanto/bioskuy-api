@@ -214,7 +214,7 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Logout successful"));
 
-        // Try to access a protected endpoint with the blacklisted token
+        // Try to access a protected endpoint with the blocklisted token
         // This should fail with 401 Unauthorized
         mockMvc.perform(get("/users/me")
                 .header("Authorization", "Bearer " + token))
@@ -223,7 +223,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     void testLogout_NoToken() throws Exception {
-        // Attempt to logout without a token
+        // Attempt to log out without a token
         mockMvc.perform(post("/users/logout"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("No authentication token provided"));

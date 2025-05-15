@@ -43,12 +43,12 @@ public class JwtUtil {
     }
 
     /**
-     * Extract username from token
+     * Extract email from a token
      * 
      * @param token JWT token
-     * @return username
+     * @return email
      */
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -113,17 +113,31 @@ public class JwtUtil {
      * Create a token with claims and subject
      * 
      * @param claims token claims
-     * @param subject token subject (username)
+     * @param subject token subject (email)
      * @return JWT token
      */
     private String createToken(Map<String, Object> claims, String subject) {
+        Date now = new Date(System.currentTimeMillis());
+        Date expiryDate = new Date(now.getTime() + JWT_TOKEN_VALIDITY);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .setId(java.util.UUID.randomUUID().toString()) // JWT ID for uniqueness
                 .signWith(key)
                 .compact();
+    }
+
+    /**
+     * Get token expiration date
+     * 
+     * @param token JWT token
+     * @return expiration date
+     */
+    public Date getExpirationDate(String token) {
+        return extractExpiration(token);
     }
 
     /**
@@ -134,15 +148,15 @@ public class JwtUtil {
      * @return true if the token is valid, false otherwise
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlacklisted(token));
+        final String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlacklisted(token));
     }
 
     /**
-     * Check if a token is blacklisted
+     * Check if a token is blocklisted
      * 
      * @param token JWT token
-     * @return true if the token is blacklisted, false otherwise
+     * @return true if the token is blocklisted, false otherwise
      */
     public boolean isTokenBlacklisted(String token) {
         return blacklistedTokens.contains(token);
