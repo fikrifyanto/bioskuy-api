@@ -1,0 +1,106 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam classStereotypeFontSize 8
+skinparam classStereotypeFontStyle bold
+
+class User {
+  - id: Long
+  - name: String
+  - email: String
+  - password: String
+  - phoneNumber: String
+  + register()
+  + login()
+  + logout()
+  + viewProfile()
+  + updateProfile()
+}
+
+class Movie {
+  - id: Long
+  - title: String
+  - genre: String
+  - duration: int
+  - rating: double
+  + viewDetails()
+}
+
+class ShowingSchedule {
+  - id: Long
+  - movie: Movie
+  - theater: Theater
+  - showingDate: LocalDate
+  - showingTime: LocalTime
+  - ticketPrice: double
+  + viewSchedule()
+}
+
+class Theater {
+  - id: Long
+  - name: String
+  - location: String
+  + viewDetails()
+}
+
+class Seat {
+  - id: Long
+  - seatNumber: String
+  - status: SeatStatus
+}
+
+enum SeatStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+class Booking {
+  - id: Long
+  - user: User
+  - showingSchedule: ShowingSchedule
+  - selectedSeats: List<Seat>
+  - bookingDateTime: LocalDateTime
+  - totalPrice: double
+  - paymentStatus: PaymentStatus
+  + createBooking()
+  + viewBookingDetails()
+  + cancelBooking()
+}
+
+enum PaymentStatus {
+  PENDING
+  AWAITING_CONFIRMATION
+  PAID
+  CANCELLED
+}
+
+class Payment {
+  - id: Long
+  - booking: Booking
+  - paymentMethod: String
+  - paymentDateTime: LocalDateTime
+  - amountPaid: double
+  - status: PaymentStatus
+  + processPayment()
+  + verifyPayment()
+}
+
+class Ticket {
+  - id: Long
+  - booking: Booking
+  - seat: Seat
+  - uniqueCode: String
+  + printTicket()
+  + scanTicket()
+}
+
+User "1" -- "*" Booking : creates
+Movie "1" -- "*" ShowingSchedule : has
+Theater "1" -- "*" ShowingSchedule : displays
+ShowingSchedule "1" -- "*" Booking : available for
+Booking "*" -- "*" Seat : includes
+Booking "1" -- "1" Payment : associated with
+Booking "1" -- "*" Ticket : generates
+Seat "*" -- "1" Ticket : is on
+@enduml

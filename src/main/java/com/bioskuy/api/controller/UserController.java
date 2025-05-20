@@ -45,7 +45,7 @@ public class UserController {
      * @return ResponseEntity with ApiResponse containing the current user
      */
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<User>> getCurrentUser() {
+    public ResponseEntity<ApiResponse<User>> viewProfile() {
         // Get the authentication object from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -70,7 +70,7 @@ public class UserController {
      * @return ResponseEntity with ApiResponse containing the created user
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
+    public ResponseEntity<ApiResponse<User>> register(@RequestBody User user) {
         try {
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -89,7 +89,7 @@ public class UserController {
      * @return ResponseEntity with ApiResponse containing the updated user
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<ApiResponse<User>> updateProfile(@PathVariable Long id, @RequestBody User user) {
         try {
             User updatedUser = userService.updateUser(id, user);
             return ResponseEntity.ok(ResponseUtil.success("User updated successfully", updatedUser.withoutPassword()));
