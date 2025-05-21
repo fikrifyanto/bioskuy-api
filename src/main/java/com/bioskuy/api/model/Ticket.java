@@ -33,4 +33,10 @@ public class Ticket {
 
     @Column(nullable = false)
     private String uniqueCode;
+
+    public Ticket(Booking booking, Seat seat, String uniqueCode){
+        this.booking = booking;
+        this.seat = seat;
+        this.uniqueCode = uniqueCode;
+    }
 }

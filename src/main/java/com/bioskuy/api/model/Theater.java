@@ -25,4 +25,9 @@ public class Theater {
 
     @Column(nullable = false)
     private String location;
+
+    public Theater(String theater_name, String location){
+        this.theater_name = theater_name;
+        this.location = location;
+    }
 }

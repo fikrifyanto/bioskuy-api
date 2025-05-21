@@ -41,4 +41,12 @@ public class ShowingSchedule {
 
     @Column(nullable = false)
     private double ticketPrice;
+
+    public ShowingSchedule(Movie movie, Theater theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){
+        this.movie = movie;
+        this.theater = theater;
+        this.showingDate = showingDate;
+        this.showingTime = showingTime;
+        this.ticketPrice = ticketPrice;
+    }
 }

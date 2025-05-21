@@ -30,4 +30,9 @@ public class Seat {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
+
+    public Seat(String seatNumber, SeatStatus status){
+        this.seatNumber = seatNumber;
+        this.status = status;
+    }
 }

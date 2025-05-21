@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
+
 import com.bioskuy.api.model.enums.PaymentStatus;
 
 
@@ -58,5 +60,15 @@ public class Booking {
     @OneToOne
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private PaymentStatus paymentStatus;
+
+    // Constructor without id
+    public Booking(User user, ShowingSchedule showingSchedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
+        this.user = user;
+        this.showingSchedule = showingSchedule;
+        this.selectedSeats = selectedSeats;
+        this.bookingDateTime = bookingDateTime;
+        this.totalPrice = totalPrice;
+        this.paymentStatus = paymentStatus;
+    }
 }

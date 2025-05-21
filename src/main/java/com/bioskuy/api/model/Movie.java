@@ -32,4 +32,10 @@ public class Movie {
     @Column(nullable = false)
     private double rating;
 
+    public Movie(String title, String genre, int duration, double rating){
+        this.title = title;
+        this.genre = genre;
+        this.duration = duration;
+        this.rating = rating;
+    }
 }
