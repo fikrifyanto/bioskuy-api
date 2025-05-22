@@ -1,5 +1,7 @@
 package com.bioskuy.api.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,12 +31,12 @@ public class Ticket {
 
     @OneToMany
     @JoinColumn(name = "seat", nullable = false)
-    private Seat seat;
+    private List<Seat> seat;
 
     @Column(nullable = false)
     private String uniqueCode;
 
-    public Ticket(Booking booking, Seat seat, String uniqueCode){
+    public Ticket(Booking booking, List<Seat> seat, String uniqueCode){
         this.booking = booking;
         this.seat = seat;
         this.uniqueCode = uniqueCode;

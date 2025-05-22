@@ -1,6 +1,6 @@
 package com.bioskuy.api.model;
 
-import com.bioskuy.api.model.enums.SeatStatus;
+import com.bioskuy.api.enums.SeatStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

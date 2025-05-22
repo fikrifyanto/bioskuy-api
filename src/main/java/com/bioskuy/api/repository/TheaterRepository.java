@@ -11,9 +11,16 @@ import com.bioskuy.api.model.Theater;
 @Repository
 public interface TheaterRepository extends JpaRepository<Theater, Long> {
     
-    // list all theater in a location
+    /**
+     * @param location
+     * @return List of all Theater in a location if exist, empty list otherwise
+     */
     List<Theater> findByLocation(String location);
 
-    // Find specific Theater based on id and location
+    /**
+     * @param id
+     * @param location
+     * @return Optional specific Theater based on id and location if exist, empty list otherwise
+     */
     Optional<Theater> findByIdandLocation(Long id, String location);
 }

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.bioskuy.api.model.enums.PaymentStatus;
+import com.bioskuy.api.enums.PaymentStatus;
 
 
 @Entity

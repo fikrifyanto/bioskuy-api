@@ -6,15 +6,22 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.bioskuy.api.enums.SeatStatus;
 import com.bioskuy.api.model.Seat;
-import com.bioskuy.api.model.enums.SeatStatus;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
     
-    // find all Seat with certain status (AVAILABLE, RESERVED, SOLD)
+    
+    /**
+     * @param status Enums SeatStatus (see model/enums.java)
+     * @return List of Seat based on status if exist, empty list otherwise
+     */
     List<Seat> findByStatus(SeatStatus status);
 
-    // find specific seat by seatNumber
+    /**
+     * @param seatNumber
+     * @return Optional Seat if exist, empty otherwise
+     */
     Optional<Seat> findByNumber(String seatNumber);
 }
