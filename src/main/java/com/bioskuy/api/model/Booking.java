@@ -7,11 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,31 +28,23 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long booking_id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user", nullable = false)
+    @Column(name = "user", nullable = false)
     private User user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "showingSchedule", nullable = false)
+    @Column(name = "showing_schedule", nullable = false)
     private ShowingSchedule showingSchedule;
 
-    @ManyToMany
-    @JoinTable(
-    name = "selectedSeats",
-    joinColumns = @JoinColumn(name = "booking_id"),
-    inverseJoinColumns = @JoinColumn(name = "seat_id")
-    )
+    @Column(name = "selected_seats",nullable = false)
     private List<Seat> selectedSeats;
 
-    @Column(nullable = false)
+    @Column(name = "booking_date_time", nullable = false)
     private LocalDateTime bookingDateTime;
 
-    @Column(nullable = false)
+    @Column(name = "total_price", nullable = false)
     private double totalPrice;
 
-    @OneToOne
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
 
     // Constructor without id

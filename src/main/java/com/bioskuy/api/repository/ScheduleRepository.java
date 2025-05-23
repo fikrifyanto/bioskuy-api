@@ -7,22 +7,24 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.bioskuy.api.model.Movie;
 import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Theater;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<ShowingSchedule, Long> {
 
     /**
-     * @param movieId
+     * @param movie
      * @return List of Schedules showing a certain movie if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByMovie(Long movieId);
+    List<ShowingSchedule> findScheduleByMovie(Movie movie);
 
     /**
-     * @param theaterId
+     * @param theater
      * @return List of Schedules showing in a certain theater if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByTheater(Long theaterId);
+    List<ShowingSchedule> findScheduleByTheater(Theater theater);
 
     /**
      * @param showingDate
@@ -43,9 +45,9 @@ public interface ScheduleRepository extends JpaRepository<ShowingSchedule, Long>
     List<ShowingSchedule> findScheduleByPrice(double ticketPrice);
 
     /**
-     * @param theaterId
+     * @param theater
      * @param showingDate
      * @return List of Schedules in specific Theater on certain date if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByTheaterandDate(Long theaterId, LocalDate showingDate);
+    List<ShowingSchedule> findScheduleByTheaterAndDate(Theater theater, LocalDate showingDate);
 }

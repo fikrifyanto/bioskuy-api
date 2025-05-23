@@ -25,20 +25,18 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ticket_id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "booking", nullable = false)
-    private Booking booking;
+    @Column(name = "booking_id", nullable = false)
+    private Booking booking_id;
 
-    @OneToMany
-    @JoinColumn(name = "seat", nullable = false)
-    private List<Seat> seat;
+    @Column(name = "seat_id", nullable = false)
+    private List<Seat> seat_id;
 
     @Column(nullable = false)
     private String uniqueCode;
 
     public Ticket(Booking booking, List<Seat> seat, String uniqueCode){
-        this.booking = booking;
-        this.seat = seat;
+        this.booking_id = booking;
+        this.seat_id = seat;
         this.uniqueCode = uniqueCode;
     }
 }

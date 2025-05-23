@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "seat")
+@Table(name = "seats")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,10 +24,10 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seat_id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "seat_number")
     private String seatNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "status")
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
