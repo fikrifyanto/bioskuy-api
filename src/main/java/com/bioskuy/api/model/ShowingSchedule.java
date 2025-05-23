@@ -25,21 +25,21 @@ public class ShowingSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long schedule_id;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "movie", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "theater", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "theater_id", nullable = false)
     private Theater theater;
 
-    @Column(nullable = false)
+    @Column(name = "showing_date", nullable = false)
     private LocalDate showingDate;
 
-    @Column(nullable = false)
+    @Column(name = "showing_time", nullable = false)
     private LocalTime showingTime;
 
-    @Column(nullable = false)
+    @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
 
     public ShowingSchedule(Movie movie, Theater theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){

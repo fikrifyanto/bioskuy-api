@@ -20,10 +20,10 @@ public class Theater {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long theater_id;
 
-    @Column(nullable = false)
+    @Column(name = "theater_name", nullable = false)
     private String theater_name;
 
-    @Column(nullable = false)
+    @Column(name = "location", nullable = false)
     private String location;
 
     public Theater(String theater_name, String location){

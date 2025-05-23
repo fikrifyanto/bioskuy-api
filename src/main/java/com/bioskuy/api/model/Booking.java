@@ -7,6 +7,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,15 +29,18 @@ import com.bioskuy.api.enums.PaymentStatus;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long booking_id;
+    private Long bookingId;
 
-    @Column(name = "user", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "showing_schedule", nullable = false)
-    private ShowingSchedule showingSchedule;
+    @ManyToOne
+    @JoinColumn(name = "showing_schedule_id", nullable = false)
+    private ShowingSchedule schedule;
 
-    @Column(name = "selected_seats",nullable = false)
+    @OneToMany
+    @JoinColumn(name = "booking_id",nullable = false)
     private List<Seat> selectedSeats;
 
     @Column(name = "booking_date_time", nullable = false)
@@ -48,9 +54,9 @@ public class Booking {
     private PaymentStatus paymentStatus;
 
     // Constructor without id
-    public Booking(User user, ShowingSchedule showingSchedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
+    public Booking(User user, ShowingSchedule schedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
         this.user = user;
-        this.showingSchedule = showingSchedule;
+        this.schedule = schedule;
         this.selectedSeats = selectedSeats;
         this.bookingDateTime = bookingDateTime;
         this.totalPrice = totalPrice;

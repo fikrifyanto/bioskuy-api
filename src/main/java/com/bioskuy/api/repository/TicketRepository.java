@@ -14,5 +14,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
      * @param uniqueCode
      * @return Optional Ticket if exists, empty otherwise
      */
-    Optional<Ticket> findByCode(String uniqueCode);
+    Optional<Ticket> findByUniqueCode(String uniqueCode);
 }

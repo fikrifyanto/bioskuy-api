@@ -30,24 +30,18 @@ public interface ScheduleRepository extends JpaRepository<ShowingSchedule, Long>
      * @param showingDate
      * @return List of Schedules showing in a specific date if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByDate(LocalDate showingDate);
+    List<ShowingSchedule> findScheduleByShowingDate(LocalDate showingDate);
 
     /**
      * @param showingTime
      * @return List of Schedules showing in a specific timeframe if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByTime(LocalTime showingTime);
+    List<ShowingSchedule> findScheduleByShowingTime(LocalTime showingTime);
 
     /**
      * @param ticketPrice
      * @return List of Schedules based on price if exist, empty list otherwise
      */
-    List<ShowingSchedule> findScheduleByPrice(double ticketPrice);
+    List<ShowingSchedule> findScheduleByTicketPrice(double ticketPrice);
 
-    /**
-     * @param theater
-     * @param showingDate
-     * @return List of Schedules in specific Theater on certain date if exist, empty list otherwise
-     */
-    List<ShowingSchedule> findScheduleByTheaterAndDate(Theater theater, LocalDate showingDate);
 }

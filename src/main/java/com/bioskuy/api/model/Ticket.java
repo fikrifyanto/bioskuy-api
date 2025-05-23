@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +25,12 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ticket_id;
 
-    @Column(name = "booking_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking_id;
 
-    @Column(name = "seat_id", nullable = false)
+    @OneToMany
+    @JoinColumn(name = "ticket_id",nullable = false)
     private List<Seat> seat_id;
 
     @Column(name = "unique_code", nullable = false)

@@ -23,5 +23,5 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
      * @param seatNumber
      * @return Optional Seat if exist, empty otherwise
      */
-    Optional<Seat> findByNumber(String seatNumber);
+    Optional<Seat> findBySeatNumber(String seatNumber);
 }

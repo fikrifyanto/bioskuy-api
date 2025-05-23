@@ -52,7 +52,7 @@ public class BookingService{
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Ticket has been " + status.toString() + ", Can't change booking");
         }
 
-        updatedBooking.setBooking_id(id);
+        updatedBooking.setBookingId(id);
         return bookingRepository.save(updatedBooking);
     }
 
