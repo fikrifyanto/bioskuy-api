@@ -45,6 +45,7 @@ class Theater {
 
 class Seat {
   - id: Long
+  - booking_id: Long
   - seatNumber: String
   - status: SeatStatus
 }
@@ -99,7 +100,7 @@ User "1" -- "*" Booking : creates
 Movie "1" -- "*" ShowingSchedule : has
 Theater "1" -- "*" ShowingSchedule : displays
 ShowingSchedule "1" -- "*" Booking : available for
-Booking "*" -- "*" Seat : includes
+Booking "1" -- "*" Seat : includes
 Booking "1" -- "1" Payment : associated with
 Booking "1" -- "*" Ticket : generates
 Seat "*" -- "1" Ticket : is on
