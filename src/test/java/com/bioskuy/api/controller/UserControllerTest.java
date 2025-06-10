@@ -259,4 +259,6 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("No authentication token provided"));
     }
+
+
 }
