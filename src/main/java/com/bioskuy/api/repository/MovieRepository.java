@@ -12,6 +12,12 @@ import com.bioskuy.api.model.Movie;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     /**
+     * @param id Movie id
+     * @return Optional containing Movie based on id if exist, empty otherwise
+     */
+    Optional<Movie> findMovieByMovieId(Long id);
+
+    /**
      * @param title Movie title
      * @return Optional containing Movie based on title if exist, empty otherwise
      */

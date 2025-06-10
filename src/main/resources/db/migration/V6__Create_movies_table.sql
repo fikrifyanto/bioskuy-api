@@ -1,4 +1,3 @@
-
 CREATE TABLE movies(
     movie_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title TEXT NOT NULL,

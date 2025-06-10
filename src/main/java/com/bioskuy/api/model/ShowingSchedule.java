@@ -26,7 +26,7 @@ public class ShowingSchedule {
     private Long schedule_id;
     
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(name = "movieId", nullable = false)
     private Movie movie;
 
     @ManyToOne
