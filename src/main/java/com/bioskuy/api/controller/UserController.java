@@ -4,9 +4,11 @@ import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
 import com.bioskuy.api.dto.JwtResponse;
 import com.bioskuy.api.dto.LoginRequest;
+import com.bioskuy.api.dto.RegisterRequest;
 import com.bioskuy.api.model.User;
 import com.bioskuy.api.security.JwtUtil;
 import com.bioskuy.api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class UserController {
 
     /**
      * Get the current logged-in user
-     * 
+     *
      * @return ResponseEntity with ApiResponse containing the current user
      */
     @GetMapping("/me")
@@ -65,26 +67,27 @@ public class UserController {
 
     /**
      * Create a new user
-     * 
-     * @param user User data
+     *
+     * @param registerRequest User data
      * @return ResponseEntity with ApiResponse containing the created user
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> register(@RequestBody User user) {
-        try {
-            User createdUser = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ResponseUtil.success("User created successfully", createdUser.withoutPassword()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseUtil.error("Invalid input: " + e.getMessage(), user));
-        }
+    public ResponseEntity<ApiResponse<User>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        User newUser = new User();
+        newUser.setName(registerRequest.getName());
+        newUser.setEmail(registerRequest.getEmail());
+        newUser.setPassword(registerRequest.getPassword());
+        newUser.setPhoneNumber(registerRequest.getPhoneNumber());
+
+        User createdUser = userService.createUser(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseUtil.success("User created successfully", createdUser.withoutPassword()));
     }
 
     /**
      * Update user
-     * 
-     * @param id User ID
+     *
+     * @param id   User ID
      * @param user Updated user data
      * @return ResponseEntity with ApiResponse containing the updated user
      */
@@ -106,12 +109,12 @@ public class UserController {
 
     /**
      * User login
-     * 
+     *
      * @param loginRequest Login request data
      * @return ResponseEntity with ApiResponse containing the JWT token and user details
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<JwtResponse>> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ApiResponse<JwtResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             // Authenticate the user
             Authentication authentication = authenticationManager.authenticate(
@@ -145,7 +148,7 @@ public class UserController {
 
     /**
      * User logout
-     * 
+     *
      * @param authHeader Authorization header containing the JWT token
      * @return ResponseEntity with ApiResponse indicating logout success
      */
@@ -175,7 +178,7 @@ public class UserController {
 
     /**
      * Refresh JWT token
-     * 
+     *
      * @param authHeader Authorization header containing the JWT token
      * @return ResponseEntity with ApiResponse containing the new JWT token
      */

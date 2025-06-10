@@ -2,12 +2,18 @@ package com.bioskuy.api.exception;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
+import com.bioskuy.api.helper.StringFormatHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Global exception handler for the application.
@@ -58,5 +64,26 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> apiResponse = ResponseUtil.error(
                 "An unexpected error occurred: " + ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Handles validation errors thrown by @Valid annotation.
+     * It collects all field errors and returns them in a structured
+     * ApiResponse format with a 400 Bad Request status.
+     *
+     * @param ex The exception thrown when validation fails.
+     * @return A ResponseEntity containing the ApiResponse with validation errors.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = StringFormatHelper.capitalizeFirstLetter(error.getDefaultMessage());
+            errors.put(fieldName, errorMessage);
+        });
+        ApiResponse<Map<String, String>> apiResponse = new ApiResponse<>("Validation error occurred", errors);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -7,16 +7,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Data Transfer Object for login requests.
+ * Data Transfer Object for register requests.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
+public class RegisterRequest {
+    @NotBlank
+    private String name;
+
     @NotBlank
     @Email
     private String email;
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String phoneNumber;
 }

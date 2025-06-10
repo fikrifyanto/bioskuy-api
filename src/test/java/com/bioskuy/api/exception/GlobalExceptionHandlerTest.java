@@ -31,6 +31,6 @@ public class GlobalExceptionHandlerTest {
         mockMvc.perform(get("/non-existent-endpoint"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.message").value("The requested resource was not found: /non-existent-endpoint"));
+                .andExpect(jsonPath("$.message").value("The requested resource was not found: non-existent-endpoint"));
     }
 }
