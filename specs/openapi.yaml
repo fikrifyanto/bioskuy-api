@@ -33,7 +33,6 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
-              id: 1
               name: "John Doe"
               email: "john.doe@example.com"
               password: "securePassword123"
@@ -119,7 +118,6 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
             example:
-              id: 1
               name: "John Doe"
               email: "john.doe@example.com"
               password: "securePassword123"
