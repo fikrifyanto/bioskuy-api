@@ -5,6 +5,7 @@ import com.bioskuy.api.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +29,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                           JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -37,18 +38,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> authorize
-                // Public endpoints
-                .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/users").permitAll() // Allow user registration
-                .requestMatchers("/users/logout").permitAll() // Allow logout without authentication
-                .requestMatchers("/users/refresh-token").permitAll() // Allow token refresh without authentication
-                // Secured endpoints
-                .anyRequest().authenticated()
-            );
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        // Public endpoints
+                        .requestMatchers("/users/login").permitAll()
+                        .requestMatchers("/users").permitAll() // Allow user registration
+                        .requestMatchers("/users/logout").permitAll() // Allow logout without authentication
+                        .requestMatchers("/users/refresh-token").permitAll() // Allow token refresh without authentication
+                        .requestMatchers(HttpMethod.PUT, "/users").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/me").authenticated()
+                        .requestMatchers("/bookings").authenticated()
+                        .requestMatchers("/payments").authenticated()
+                        .requestMatchers("/tickets").authenticated()
+
+                        // Secured endpoints
+                        .anyRequest().permitAll()
+                );
 
         // Add JWT filter before UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
