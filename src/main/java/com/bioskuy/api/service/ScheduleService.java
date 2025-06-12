@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bioskuy.api.model.ShowingSchedule;
-import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.repository.ScheduleRepository;
 
 @Service
