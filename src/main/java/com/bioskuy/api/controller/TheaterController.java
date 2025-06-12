@@ -15,18 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
+import com.bioskuy.api.model.Movie;
 import com.bioskuy.api.model.ShowingSchedule;
 import com.bioskuy.api.model.Theater;
+import com.bioskuy.api.service.MovieService;
+import com.bioskuy.api.service.ScheduleService;
 import com.bioskuy.api.service.TheaterService;
 
 @RestController
 @RequestMapping("/theater")
 public class TheaterController {
+    private final MovieService movieService;
     private final TheaterService theaterService;
     private final ScheduleService scheduleService;
 
     @Autowired
-    public TheaterController(TheaterService theaterService, ScheduleService scheduleService) {
+    public TheaterController(TheaterService theaterService, ScheduleService scheduleService, MovieService movieService) {
+        this.movieService = movieService;
         this.theaterService = theaterService;
         this.scheduleService = scheduleService;
     }
@@ -41,12 +46,13 @@ public class TheaterController {
     public ResponseEntity<ApiResponse<List<Theater>>> getTheatersfromMovie(@PathVariable Long id){
         Set<Theater> theaters = new HashSet<>();
         Theater theater;
+        Movie movie = movieService.getMoviebyId(id);
 
-        List<ShowingSchedule> movieSchedule = scheduleService.getAllSchedulebyMovie(id);
+        List<ShowingSchedule> movieSchedule = scheduleService.getAllSchedulebyMovie(movie);
 
         for(ShowingSchedule show : movieSchedule){
             try {
-                theater = theaterService.getTheaterbyId(show.getTheater());
+                theater = theaterService.getTheaterbyId(show.getTheater().getTheater_id());
                 theaters.add(theater);
             } catch (IllegalArgumentException e) {
                 if (e.getMessage().contains("not found")) {
