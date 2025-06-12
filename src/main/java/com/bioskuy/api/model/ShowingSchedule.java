@@ -25,13 +25,11 @@ public class ShowingSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long schedule_id;
     
-    @ManyToOne
-    @JoinColumn(name = "movieId", nullable = false)
-    private Movie movie;
+    @Column(name = "movieId", nullable = false)
+    private Long movie;
 
-    @ManyToOne
-    @JoinColumn(name = "theater_id", nullable = false)
-    private Theater theater;
+    @Column(name = "theater_id", nullable = false)
+    private Long theater;
 
     @Column(name = "showing_date", nullable = false)
     private LocalDate showingDate;
@@ -42,7 +40,7 @@ public class ShowingSchedule {
     @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
 
-    public ShowingSchedule(Movie movie, Theater theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){
+    public ShowingSchedule(Long movie, Long theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){
         this.movie = movie;
         this.theater = theater;
         this.showingDate = showingDate;
