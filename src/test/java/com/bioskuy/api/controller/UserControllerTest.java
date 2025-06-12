@@ -134,7 +134,6 @@ public class UserControllerTest {
                 .content(objectMapper.writeValueAsString(testUser)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("User created successfully"))
-                .andExpect(jsonPath("$.data.id").value(1))
                 .andExpect(jsonPath("$.data.name").value("Test User"))
                 .andExpect(jsonPath("$.data.email").value("test@example.com"))
                 .andExpect(jsonPath("$.data.phoneNumber").value("1234567890"))

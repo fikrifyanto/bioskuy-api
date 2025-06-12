@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/logout").permitAll() // Allow logout without authentication
                         .requestMatchers("/users/refresh-token").permitAll() // Allow token refresh without authentication
                         .requestMatchers(HttpMethod.PUT, "/users").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                         .requestMatchers("/bookings").authenticated()
                         .requestMatchers("/payments").authenticated()
                         .requestMatchers("/tickets").authenticated()
