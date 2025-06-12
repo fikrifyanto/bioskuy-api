@@ -67,6 +67,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles IllegalArgumentException - thrown when a method receives
+     * an argument that is inappropriate or invalid.
+     * This typically indicates a client-side error where input data does not
+     * meet the expected criteria or business rules.
+     *
+     * @param ex The IllegalArgumentException that was thrown
+     * @return A ResponseEntity with a 400 Bad Request status and an error message
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(
+            IllegalArgumentException ex) {
+        ApiResponse<Object> apiResponse = ResponseUtil.error(
+                "Invalid input: " + ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * Handles validation errors thrown by @Valid annotation.
      * It collects all field errors and returns them in a structured
      * ApiResponse format with a 400 Bad Request status.
