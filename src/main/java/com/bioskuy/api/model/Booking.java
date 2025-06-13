@@ -39,8 +39,7 @@ public class Booking {
     @JoinColumn(name = "showing_schedule_id", nullable = false)
     private ShowingSchedule schedule;
 
-    @OneToMany
-    @JoinColumn(name = "booking_id",nullable = false)
+    @OneToMany(mappedBy = "booking")
     private List<Seat> selectedSeats;
 
     @Column(name = "booking_date_time", nullable = false)

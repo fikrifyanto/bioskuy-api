@@ -11,6 +11,12 @@ import com.bioskuy.api.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     /**
+     * @param ticket_id Movie id
+     * @return Optional containing Movie based on id if exist, empty otherwise
+     */
+    Optional<Ticket> findTicketByTicketId(Long ticket_id);
+
+    /**
      * @param uniqueCode
      * @return Optional Ticket if exists, empty otherwise
      */

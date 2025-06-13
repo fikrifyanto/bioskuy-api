@@ -22,8 +22,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ticket {
     @Id
+    @Column(name = "ticket_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticket_id;
+    private Long ticketId;
 
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)

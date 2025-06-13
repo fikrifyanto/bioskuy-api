@@ -66,7 +66,7 @@ public class BookingController {
      * @param id
      * @return ResponseEntity with ApiResponse containing the Booking with certain id
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Booking>> viewBookingDetails(@PathVariable Long id){
         try {
             Booking booking = bookingService.getBookingbyId(id);
@@ -83,7 +83,7 @@ public class BookingController {
     *         {@code 409 Conflict} if the booking has already been paid,
     *         or {@code 404 Not Found} if the booking does not exist
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelBooking(@PathVariable Long id){
         try{
             Booking booking = bookingService.getBookingbyId(id);
