@@ -81,6 +81,7 @@ public class UserControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(userController)
                 .setMessageConverters(converter)
                 .setHandlerExceptionResolvers(exceptionResolver)
+                .setControllerAdvice(new com.bioskuy.api.exception.GlobalExceptionHandler()) // Add GlobalExceptionHandler
                 .build();
     }
 

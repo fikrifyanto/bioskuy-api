@@ -46,7 +46,7 @@ public class TheaterController {
     public ResponseEntity<ApiResponse<List<Theater>>> getTheatersfromMovie(@PathVariable Long id){
         Set<Theater> theaters = new HashSet<>();
         Theater theater;
-        Movie movie = movieService.getMoviebyId(id);
+        Movie movie = movieService.getMovieById(id);
 
         List<ShowingSchedule> movieSchedule = scheduleService.getAllSchedulebyMovie(movie);
 
