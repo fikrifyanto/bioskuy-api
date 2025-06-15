@@ -1,5 +1,6 @@
 package com.bioskuy.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,13 +25,15 @@ public class ShowingSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long schedule_id;
-    
+
     @ManyToOne
-    @JoinColumn(name = "movieId", nullable = false)
+    @JoinColumn(name = "movie_id", nullable = false)
+    @JsonBackReference
     private Movie movie;
 
     @ManyToOne
     @JoinColumn(name = "theater_id", nullable = false)
+    @JsonBackReference
     private Theater theater;
 
     @Column(name = "showing_date", nullable = false)

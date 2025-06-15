@@ -26,7 +26,6 @@ public class MovieControllerIntegrationTest {
     private MovieRepository movieRepository;
 
     private Movie testMovie1;
-    private Movie testMovie2;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +39,7 @@ public class MovieControllerIntegrationTest {
         testMovie1.setDuration(120);
         testMovie1.setRating(4.5);
 
-        testMovie2 = new Movie();
+        Movie testMovie2 = new Movie();
         testMovie2.setTitle("Another Test Movie");
         testMovie2.setGenre("Comedy");
         testMovie2.setDuration(90);
@@ -48,7 +47,7 @@ public class MovieControllerIntegrationTest {
 
         // Save the movies to the database
         testMovie1 = movieRepository.save(testMovie1);
-        testMovie2 = movieRepository.save(testMovie2);
+        movieRepository.save(testMovie2);
     }
 
     @AfterEach
@@ -65,7 +64,7 @@ public class MovieControllerIntegrationTest {
                         .param("sortBy", "id")
                         .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Movies retrieved sucessfully"))
+                .andExpect(jsonPath("$.message").value("Retrieved 2 Movie(s) (Page 1 of 1)"))
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.data.content", hasSize(2)))
                 .andExpect(jsonPath("$.data.content[0].title").value("Integration Test Movie"))
@@ -87,7 +86,7 @@ public class MovieControllerIntegrationTest {
                         .param("sortBy", "id")
                         .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Movies retrieved sucessfully"))
+                .andExpect(jsonPath("$.message").value("Retrieved 1 Movie(s) (Page 1 of 1)"))
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.data.content", hasSize(1)))
                 .andExpect(jsonPath("$.data.content[0].title").value("Integration Test Movie"));
@@ -102,7 +101,7 @@ public class MovieControllerIntegrationTest {
                         .param("sortBy", "id")
                         .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Movies retrieved sucessfully"))
+                .andExpect(jsonPath("$.message").value("Retrieved 1 Movie(s) (Page 1 of 1)"))
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.data.content", hasSize(1)))
                 .andExpect(jsonPath("$.data.content[0].title").value("Another Test Movie"))
@@ -118,7 +117,7 @@ public class MovieControllerIntegrationTest {
                         .param("sortBy", "id")
                         .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Movies retrieved sucessfully"))
+                .andExpect(jsonPath("$.message").value("Retrieved 1 Movie(s) (Page 1 of 1)"))
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.data.content", hasSize(1)))
                 .andExpect(jsonPath("$.data.content[0].title").value("Integration Test Movie"))
@@ -133,7 +132,7 @@ public class MovieControllerIntegrationTest {
                         .param("sortBy", "id")
                         .param("direction", "desc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Movies retrieved sucessfully"))
+                .andExpect(jsonPath("$.message").value("Retrieved 2 Movie(s) (Page 1 of 1)"))
                 .andExpect(jsonPath("$.data.content").isArray())
                 .andExpect(jsonPath("$.data.content", hasSize(2)))
                 .andExpect(jsonPath("$.data.content[0].title").value("Another Test Movie"))

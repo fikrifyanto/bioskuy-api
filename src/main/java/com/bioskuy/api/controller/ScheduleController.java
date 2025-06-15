@@ -41,7 +41,7 @@ public class ScheduleController {
         try {
             Theater theater = theaterService.getTheaterbyId(id);
             List<ShowingSchedule> schedulesTheater = scheduleService.getAllSchedulebyTheater(theater);
-            return ResponseEntity.ok(ResponseUtil.success("Retreived " + schedulesTheater.size() + " Schedule(s) From Theater " + theater.getTheater_name(), schedulesTheater));
+            return ResponseEntity.ok(ResponseUtil.success("Retreived " + schedulesTheater.size() + " Schedule(s) From Theater " + theater.getName(), schedulesTheater));
         } catch (IllegalArgumentException e) {
             if (e.getMessage().contains("not found")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

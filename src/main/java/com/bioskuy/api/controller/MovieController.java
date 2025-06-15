@@ -67,7 +67,9 @@ public class MovieController {
                 pageable
         );
 
-        return ResponseEntity.ok(ResponseUtil.success("Movies retrieved sucessfully", moviePage));
+        return ResponseEntity.ok(ResponseUtil.success(
+                "Retrieved " + moviePage.getNumberOfElements() + " Movie(s) (Page " + (page + 1) + " of " + moviePage.getTotalPages() + ")",
+                moviePage));
     }
 
     /**
