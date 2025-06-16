@@ -1,11 +1,3 @@
-TRUNCATE bookings;
-TRUNCATE movies;
-TRUNCATE schedules;
-TRUNCATE seats;
-TRUNCATE theaters;
-TRUNCATE tickets;
-TRUNCATE users;
-
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone_number`) VALUES (NULL, 'John Doe', 'johndoe1@example.com', 'securePassword123', '+1234567890');
 INSERT INTO `movies` (`movie_id`, `title`, `genre`, `duration`, `rating`) VALUES (NULL, 'The Lion King', 'Animation, Fairytale', '120', '4.5');
 INSERT INTO `movies` (`movie_id`, `title`, `genre`, `duration`, `rating`) VALUES (NULL, 'Star Wars', 'Action', '120', '4.9');
@@ -14,4 +6,6 @@ INSERT INTO `theaters` (`theater_id`, `theater_name`, `location`) VALUES (NULL, 
 INSERT INTO `theaters` (`theater_id`, `theater_name`, `location`) VALUES (NULL, 'Dublin Theater', 'Dublin, Ireland');
 INSERT INTO `schedules`(`schedule_id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'2','1','2025-06-13','16:04:49','8');
 INSERT INTO `schedules`(`schedule_id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'3','2','2025-06-13','16:04:49','10');
-
+INSERT INTO `bookings` (`booking_id`, `payment_status`, `user_id`, `booking_date_time`, `total_price`, `showing_schedule_id`) VALUES (NULL, 'AWAITING_CONFIRMATION', '1', '2025-06-16 17:55:00.000000', '24', '1');
+INSERT INTO `seats` (`seat_id`, `seat_number`, `booking_id`, `status`) VALUES ('45', 'F7', '1', 'RESERVED');
+INSERT INTO `seats` (`seat_id`, `seat_number`, `booking_id`, `status`) VALUES ('46', 'F8', '1', 'RESERVED');

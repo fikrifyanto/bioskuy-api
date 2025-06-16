@@ -30,9 +30,6 @@ public class Seat {
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
-    @ManyToOne
-    @JoinColumn(name = "schedule_id", nullable = false)
-    private ShowingSchedule schedule;
 
     @Column(nullable = false, name = "seat_number")
     private String seatNumber;

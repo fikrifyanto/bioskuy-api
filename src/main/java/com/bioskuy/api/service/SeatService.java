@@ -27,14 +27,14 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
-    public List<Seat> getSeatsbySchedule(Long id){
-        ShowingSchedule schedule = scheduleRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
+    // public List<Seat> getSeatsbySchedule(Long id){
+    //     ShowingSchedule schedule = scheduleRepository.findById(id)
+    //         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
         
-        List<Seat> seatsbySchedule = seatRepository.findBySchedule(schedule);
+    //     List<Seat> seatsbySchedule = seatRepository.findBySchedule(schedule);
 
-        return seatsbySchedule;
+    //     return seatsbySchedule;
 
-    }
+    // }
     
 }
