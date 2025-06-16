@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.bioskuy.api.model.Seat;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.SeatRepository;
 
@@ -28,13 +28,11 @@ public class SeatService {
     }
 
     public List<Seat> getSeatsbySchedule(Long id){
-        ShowingSchedule schedule = scheduleRepository.findById(id)
+        Schedule schedule = scheduleRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
-        
-        List<Seat> seatsbySchedule = seatRepository.findBySchedule(schedule);
 
-        return seatsbySchedule;
+        return seatRepository.findBySchedule(schedule);
 
     }
-    
+
 }

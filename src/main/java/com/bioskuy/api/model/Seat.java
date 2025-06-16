@@ -32,7 +32,7 @@ public class Seat {
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", nullable = false)
-    private ShowingSchedule schedule;
+    private Schedule schedule;
 
     @Column(nullable = false, name = "seat_number")
     private String seatNumber;

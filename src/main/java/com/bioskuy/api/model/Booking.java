@@ -37,7 +37,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "showing_schedule_id", nullable = false)
-    private ShowingSchedule schedule;
+    private Schedule schedule;
 
     @OneToMany(mappedBy = "booking")
     private List<Seat> selectedSeats;
@@ -53,7 +53,7 @@ public class Booking {
     private PaymentStatus paymentStatus;
 
     // Constructor without id
-    public Booking(User user, ShowingSchedule schedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
+    public Booking(User user, Schedule schedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
         this.user = user;
         this.schedule = schedule;
         this.selectedSeats = selectedSeats;

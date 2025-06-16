@@ -1,7 +1,7 @@
 package com.bioskuy.api.controller;
 
 import com.bioskuy.api.model.Movie;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.repository.MovieRepository;
 import com.bioskuy.api.repository.ScheduleRepository;
@@ -90,14 +90,14 @@ public class TheaterControllerIntegrationTest {
         testMovie = movieRepository.save(testMovie);
 
         // Create test schedules
-        ShowingSchedule testSchedule1 = new ShowingSchedule();
+        Schedule testSchedule1 = new Schedule();
         testSchedule1.setMovie(testMovie);
         testSchedule1.setTheater(testTheater1);
         testSchedule1.setShowingDate(LocalDate.now());
         testSchedule1.setShowingTime(LocalTime.of(10, 0));
         testSchedule1.setTicketPrice(50.0);
 
-        ShowingSchedule testSchedule2 = new ShowingSchedule();
+        Schedule testSchedule2 = new Schedule();
         testSchedule2.setMovie(testMovie);
         testSchedule2.setTheater(testTheater2);
         testSchedule2.setShowingDate(LocalDate.now());
@@ -125,14 +125,21 @@ public class TheaterControllerIntegrationTest {
         theaterRepository.save(testTheater1);
         theaterRepository.save(testTheater2);
 
-        // Verify that the endpoint returns a 200-OK status
+        // Verify that the endpoint returns a 200-OK status and correct response body
         mockMvc.perform(get("/theaters")
                         .param("page", "0")
                         .param("size", "10")
                         .param("sortBy", "id")
                         .param("direction", "asc")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Retrieved 2 Theater(s) (Page 1 of 1)"))
+                .andExpect(jsonPath("$.data.content").isArray())
+                .andExpect(jsonPath("$.data.content.length()").value(2))
+                .andExpect(jsonPath("$.data.content[0].name").value("Integration Test Theater 1"))
+                .andExpect(jsonPath("$.data.content[0].location").value("Integration Test Location 1"))
+                .andExpect(jsonPath("$.data.content[1].name").value("Integration Test Theater 2"))
+                .andExpect(jsonPath("$.data.content[1].location").value("Integration Test Location 2"));
     }
 
     @Test
@@ -143,14 +150,21 @@ public class TheaterControllerIntegrationTest {
         theaterRepository.save(testTheater1);
         theaterRepository.save(testTheater2);
 
-        // Verify that the endpoint returns a 200-OK status
+        // Verify that the endpoint returns a 200-OK status and correct response body
         mockMvc.perform(get("/theaters")
                         .param("page", "0")
                         .param("size", "10")
                         .param("sortBy", "id")
                         .param("direction", "desc")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Retrieved 2 Theater(s) (Page 1 of 1)"))
+                .andExpect(jsonPath("$.data.content").isArray())
+                .andExpect(jsonPath("$.data.content.length()").value(2))
+                .andExpect(jsonPath("$.data.content[0].name").value("Integration Test Theater 2"))
+                .andExpect(jsonPath("$.data.content[0].location").value("Integration Test Location 2"))
+                .andExpect(jsonPath("$.data.content[1].name").value("Integration Test Theater 1"))
+                .andExpect(jsonPath("$.data.content[1].location").value("Integration Test Location 1"));
     }
 
     @Test

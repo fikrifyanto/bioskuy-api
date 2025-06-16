@@ -32,7 +32,7 @@ public class Theater {
 
     @OneToMany(mappedBy = "theater")
     @JsonManagedReference
-    private List<ShowingSchedule> schedules;
+    private List<Schedule> schedules;
 
     public Theater(String name, String location){
         this.name = name;

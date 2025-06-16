@@ -12,6 +12,6 @@ INSERT INTO `movies` (`id`, `title`, `genre`, `duration`, `rating`) VALUES (NULL
 INSERT INTO `movies` (`id`, `title`, `genre`, `duration`, `rating`) VALUES (NULL, 'Mission Impossible', 'Action', '154', '4.8');
 INSERT INTO `theaters` (`id`, `name`, `location`) VALUES (NULL, 'Kansas Theater', 'Kansas, USA');
 INSERT INTO `theaters` (`id`, `name`, `location`) VALUES (NULL, 'Dublin Theater', 'Dublin, Ireland');
-INSERT INTO `schedules`(`schedule_id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'2','1','2025-06-13','16:04:49','8');
-INSERT INTO `schedules`(`schedule_id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'3','2','2025-06-13','16:04:49','10');
+INSERT INTO `schedules`(`id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'2','1','2025-06-13','16:04:49','8');
+INSERT INTO `schedules`(`id`, `movie_id`, `theater_id`, `showing_date`, `showing_time`, `ticket_price`) VALUES (NULL,'3','2','2025-06-13','16:04:49','10');
 

@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.TheaterRepository;
@@ -48,20 +48,20 @@ public class TheaterService{
      */
     public List<Theater> getTheatersByMovieId(Long movieId) {
         // Find all schedules for the movie
-        List<ShowingSchedule> movieSchedules = scheduleRepository.findAll().stream()
+        List<Schedule> movieSchedules = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getMovie().getId().equals(movieId))
                 .toList();
 
         // Extract unique theaters from the schedules
         Set<Theater> uniqueTheaters = new HashSet<>();
-        for (ShowingSchedule schedule : movieSchedules) {
+        for (Schedule schedule : movieSchedules) {
             uniqueTheaters.add(schedule.getTheater());
         }
 
         // For each theater, filter its schedules to only include those for the specified movie
         List<Theater> theaters = uniqueTheaters.stream().toList();
         for (Theater theater : theaters) {
-            List<ShowingSchedule> theaterSchedulesForMovie = movieSchedules.stream()
+            List<Schedule> theaterSchedulesForMovie = movieSchedules.stream()
                     .filter(schedule -> schedule.getTheater().getId().equals(theater.getId()))
                     .toList();
             theater.setSchedules(theaterSchedulesForMovie);

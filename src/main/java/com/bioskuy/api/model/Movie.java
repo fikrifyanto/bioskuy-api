@@ -38,7 +38,7 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie")
     @JsonManagedReference
-    private List<ShowingSchedule> schedules;
+    private List<Schedule> schedules;
 
     public Movie(String title, String genre, int duration, double rating) {
         this.title = title;
