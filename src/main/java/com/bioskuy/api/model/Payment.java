@@ -1,87 +1,55 @@
 package com.bioskuy.api.model;
+
+import com.bioskuy.api.enums.PaymentStatus;   // ← enum di package berbeda
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 
-public class Payment {
+@Entity
+@Table(name = "payments")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
+public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "booking_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Booking booking;
+
+    @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
+
+    @Column(name = "payment_datetime")
     private LocalDateTime paymentDateTime;
+
+    @Column(name = "amount_paid")
     private double amountPaid;
+
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
-    // Constructors
-    public Payment() {
-    }
-
-    public Payment(Long id, Booking booking, String paymentMethod, LocalDateTime paymentDateTime, double amountPaid, PaymentStatus status) {
-        this.id = id;
-        this.booking = booking;
-        this.paymentMethod = paymentMethod;
-        this.paymentDateTime = paymentDateTime;
-        this.amountPaid = amountPaid;
-        this.status = status;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public LocalDateTime getPaymentDateTime() {
-        return paymentDateTime;
-    }
-
-    public void setPaymentDateTime(LocalDateTime paymentDateTime) {
-        this.paymentDateTime = paymentDateTime;
-    }
-
-    public double getAmountPaid() {
-        return amountPaid;
-    }
-
-    public void setAmountPaid(double amountPaid) {
-        this.amountPaid = amountPaid;
-    }
-
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
-
-    // Methods
     public void processPayment() {
-        this.status = PaymentStatus.PROCESSED;
-        this.paymentDateTime = LocalDateTime.now();
-    }
-
-    public void verifyPayment() {
-        if (this.status == PaymentStatus.PROCESSED) {
-            this.status = PaymentStatus.VERIFIED;
+        // Example business logic for payment processing
+        if (status == PaymentStatus.PENDING) {
+            status = PaymentStatus.AWAITING_CONFIRMATION;
+            System.out.println("Payment is being processed for booking ID: " + booking.getBookingId());
         }
     }
+
+    public boolean verifyPayment() {
+        // Example verification logic
+        return this.status == PaymentStatus.PAID;
+    }
 }
+
