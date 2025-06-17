@@ -48,7 +48,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "showing_schedule_id", nullable = false)
-    private ShowingSchedule showingSchedule;
+    private Schedule showingSchedule;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Seat> selectedSeats;

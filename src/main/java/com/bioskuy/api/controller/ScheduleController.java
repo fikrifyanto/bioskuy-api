@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.service.ScheduleService;
 import com.bioskuy.api.service.TheaterService;
@@ -31,16 +31,16 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ShowingSchedule>>> getAllSchedule(){
-        List<ShowingSchedule> schedules = scheduleService.getAllSchedule();
+    public ResponseEntity<ApiResponse<List<Schedule>>> getAllSchedule(){
+        List<Schedule> schedules = scheduleService.getAllSchedule();
         return ResponseEntity.ok(ResponseUtil.success("Retreived " + schedules.size() + " Schedule(s)", schedules));
     }
 
     @GetMapping("/theater/{id}")
-    public ResponseEntity<ApiResponse<List<ShowingSchedule>>> getSchedulesbyTheaterId(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<List<Schedule>>> getSchedulesbyTheaterId(@PathVariable Long id){
         try {
             Theater theater = theaterService.getTheaterbyId(id);
-            List<ShowingSchedule> schedulesTheater = scheduleService.getAllSchedulebyTheater(theater);
+            List<Schedule> schedulesTheater = scheduleService.getAllSchedulebyTheater(theater);
             return ResponseEntity.ok(ResponseUtil.success("Retreived " + schedulesTheater.size() + " Schedule(s) From Theater " + theater.getTheater_name(), schedulesTheater));
         } catch (IllegalArgumentException e) {
             if (e.getMessage().contains("not found")) {

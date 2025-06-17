@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bioskuy.api.model.Movie;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.repository.ScheduleRepository;
 
@@ -19,15 +19,15 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public List<ShowingSchedule> getAllSchedule(){
+    public List<Schedule> getAllSchedule(){
         return scheduleRepository.findAll();
     }
 
-    public List<ShowingSchedule> getAllSchedulebyMovie(Movie movie){
+    public List<Schedule> getAllSchedulebyMovie(Movie movie){
         return scheduleRepository.findScheduleByMovie(movie);
     }
 
-    public List<ShowingSchedule> getAllSchedulebyTheater(Theater theater){
+    public List<Schedule> getAllSchedulebyTheater(Theater theater){
         return scheduleRepository.findScheduleByTheater(theater);
     }
 

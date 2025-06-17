@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
 import com.bioskuy.api.model.Movie;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.service.MovieService;
 import com.bioskuy.api.service.ScheduleService;
@@ -48,9 +48,9 @@ public class TheaterController {
         Theater theater;
         Movie movie = movieService.getMoviebyId(id);
 
-        List<ShowingSchedule> movieSchedule = scheduleService.getAllSchedulebyMovie(movie);
+        List<Schedule> movieSchedule = scheduleService.getAllSchedulebyMovie(movie);
 
-        for(ShowingSchedule show : movieSchedule){
+        for(Schedule show : movieSchedule){
             try {
                 theater = theaterService.getTheaterbyId(show.getTheater().getTheater_id());
                 theaters.add(theater);

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.bioskuy.api.model.Seat;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.SeatRepository;
 

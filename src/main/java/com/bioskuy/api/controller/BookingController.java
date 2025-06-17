@@ -18,7 +18,7 @@ import com.bioskuy.api.common.ResponseUtil;
 import com.bioskuy.api.enums.PaymentStatus;
 import com.bioskuy.api.model.Booking;
 import com.bioskuy.api.model.Seat;
-import com.bioskuy.api.model.ShowingSchedule;
+import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.User;
 import com.bioskuy.api.service.BookingService;
 
@@ -39,7 +39,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Booking>> createBooking(User user, ShowingSchedule showingSchedule, List<Seat> selectedSeats){
+    public ResponseEntity<ApiResponse<Booking>> createBooking(User user, Schedule showingSchedule, List<Seat> selectedSeats){
         try {
             Booking booking = new Booking();
             LocalDateTime bookingDateTime = LocalDateTime.now();

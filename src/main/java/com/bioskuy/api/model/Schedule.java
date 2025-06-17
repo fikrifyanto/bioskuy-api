@@ -20,10 +20,10 @@ import java.time.LocalTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShowingSchedule {
+public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long schedule_id;
+    private Long id;
     
     @ManyToOne
     @JoinColumn(name = "movieId", nullable = false)
@@ -42,7 +42,7 @@ public class ShowingSchedule {
     @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
 
-    public ShowingSchedule(Movie movie, Theater theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){
+    public Schedule(Movie movie, Theater theater, LocalDate showingDate, LocalTime showingTime, double ticketPrice){
         this.movie = movie;
         this.theater = theater;
         this.showingDate = showingDate;
