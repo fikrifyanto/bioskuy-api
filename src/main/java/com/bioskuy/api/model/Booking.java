@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Booking {
     @Id
-    @Column(name = "booking_id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
 
@@ -49,18 +49,17 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "showing_schedule_id", nullable = false)
     private Schedule schedule;
-    private Schedule showingSchedule;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Seat> selectedSeats;
 
     // Constructor without id
-    public Booking(User user, Schedule schedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus paymentStatus){
+    public Booking(User user, Schedule schedule, List<Seat> selectedSeats, LocalDateTime bookingDateTime, double totalPrice, PaymentStatus status){
         this.user = user;
         this.schedule = schedule;
         this.selectedSeats = selectedSeats;
         this.bookingDateTime = bookingDateTime;
         this.totalPrice = totalPrice;
-        this.paymentStatus = paymentStatus;
+        this.status = status;
     }
 }

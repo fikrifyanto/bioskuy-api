@@ -14,7 +14,6 @@ import com.bioskuy.api.model.User;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    void deleteByBookingId(Long id);
     /**
      * @param user The user whose bookings are to be retrieved
      * @return List of booking done by user if existed, empty list otherwise
@@ -39,4 +38,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      */
     List<Booking> findByPaymentStatus(PaymentStatus paymentStatus);
 
+    void deleteByBookingId(Long id);
 }

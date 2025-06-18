@@ -1,6 +1,8 @@
 package com.bioskuy.api.model;
 import java.time.LocalDateTime;
 
+import com.bioskuy.api.enums.PaymentStatus;
+
 
 public class Payment {
 
@@ -75,13 +77,13 @@ public class Payment {
 
     // Methods
     public void processPayment() {
-        this.status = PaymentStatus.PROCESSED;
+        this.status = PaymentStatus.AWAITING_CONFIRMATION;
         this.paymentDateTime = LocalDateTime.now();
     }
 
     public void verifyPayment() {
-        if (this.status == PaymentStatus.PROCESSED) {
-            this.status = PaymentStatus.VERIFIED;
+        if (this.status == PaymentStatus.AWAITING_CONFIRMATION) {
+            this.status = PaymentStatus.PAID;
         }
     }
 }

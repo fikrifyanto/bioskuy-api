@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Seat {
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seat_id;
 

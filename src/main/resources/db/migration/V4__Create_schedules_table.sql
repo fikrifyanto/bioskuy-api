@@ -6,6 +6,6 @@ CREATE TABLE schedules(
     showing_time TIME NOT NULL,
     ticket_price DOUBLE NOT NULL,
 
-    FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
-    FOREIGN KEY (theater_id) REFERENCES theaters(theater_id)
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (theater_id) REFERENCES theaters(id)
 );

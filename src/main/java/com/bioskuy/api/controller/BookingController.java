@@ -39,18 +39,18 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Booking>> createBooking(User user, Schedule showingSchedule, List<Seat> selectedSeats){
+    public ResponseEntity<ApiResponse<Booking>> createBooking(User user, Schedule schedule, List<Seat> selectedSeats){
         try {
             Booking booking = new Booking();
             LocalDateTime bookingDateTime = LocalDateTime.now();
             
             booking.setBookingId(null);
             booking.setBookingDateTime(bookingDateTime);
-            booking.setShowingSchedule(showingSchedule);
+            booking.setSchedule(schedule);
             booking.setSelectedSeats(selectedSeats);
             booking.setStatus(PaymentStatus.AWAITING_CONFIRMATION);
             booking.setUser(user);
-            booking.setTotalPrice(showingSchedule.getTicketPrice());
+            booking.setTotalPrice(schedule.getTicketPrice());
 
             return ResponseEntity.ok(ResponseUtil.success("Booking created successfully", booking));
         } catch (IllegalArgumentException e) {
