@@ -1,4 +1,4 @@
-package com.bioskuy.api.dto;
+package com.bioskuy.api.model.register;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
@@ -24,7 +24,4 @@ public class RegisterRequest {
 
     @NotBlank
     private String password;
-
-    @NotBlank
-    private String phoneNumber;
 }

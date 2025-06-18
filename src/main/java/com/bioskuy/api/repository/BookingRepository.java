@@ -1,30 +1,23 @@
 package com.bioskuy.api.repository;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.bioskuy.api.enums.BookingStatus;
+import com.bioskuy.api.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bioskuy.api.enums.PaymentStatus;
-import com.bioskuy.api.model.Booking;
-import com.bioskuy.api.model.Schedule;
-import com.bioskuy.api.model.User;
+import com.bioskuy.api.entity.Booking;
+import com.bioskuy.api.entity.Schedule;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     /**
-     * @param user The user whose bookings are to be retrieved
+     * @param customer The user whose bookings are to be retrieved
      * @return List of booking done by user if existed, empty list otherwise
      */
-    List<Booking> findByUser(User user);
-
-    /**
-     * @param id The booking ID to search for
-     * @return Optional booking if existed, empty otherwise
-     */
-    Optional<Booking> findByBookingId(Long id);
+    List<Booking> findByCustomer(Customer customer);
 
     /**
      * @param schedule The schedule for which to retrieve bookings
@@ -33,9 +26,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBySchedule(Schedule schedule);
 
     /**
-     * @param paymentStatus The payment status to filter bookings by
+     * @param bookingStatus The payment status to filter bookings by
      * @return List of booking by payment status if existed, empty list otherwise
      */
-    List<Booking> findByPaymentStatus(PaymentStatus paymentStatus);
+    List<Booking> findByStatus(BookingStatus bookingStatus);
 
 }

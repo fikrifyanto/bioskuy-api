@@ -1,6 +1,6 @@
 package com.bioskuy.api.repository;
 
-import com.bioskuy.api.model.User;
+import com.bioskuy.api.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Provides database operations for the User entity.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     /**
      * Find the user by email
@@ -19,5 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param email User email
      * @return Optional containing the user if found, empty otherwise
      */
-    Optional<User> findByEmail(String email);
+    Optional<Customer> findByEmail(String email);
 }

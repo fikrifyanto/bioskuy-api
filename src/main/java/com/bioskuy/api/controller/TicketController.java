@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
-import com.bioskuy.api.model.Ticket;
+import com.bioskuy.api.entity.Ticket;
 import com.bioskuy.api.service.TicketService;
 
 @RestController

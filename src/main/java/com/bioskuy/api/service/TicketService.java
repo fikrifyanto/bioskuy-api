@@ -1,18 +1,20 @@
 package com.bioskuy.api.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.bioskuy.api.model.Ticket;
+import com.bioskuy.api.entity.Booking;
+import com.bioskuy.api.entity.Ticket;
 import com.bioskuy.api.repository.TicketRepository;
 
 @Service
 public class TicketService {
-    
+
     private final TicketRepository ticketRepository;
 
     @Autowired
@@ -26,9 +28,18 @@ public class TicketService {
     }
 
     public Ticket getTicketbyId(Long id){
-        Ticket ticket = ticketRepository.findTicketByTicketId(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Movie not found"));
+        Ticket ticket = ticketRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Ticket not found"));
         return ticket;
     }
 
+    public Ticket createTicket(Booking booking) {
+        Ticket ticket = new Ticket();
+        ticket.setBooking(booking);
+        return ticketRepository.save(ticket);
+    }
+
+    private String generateUniqueCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
 }
