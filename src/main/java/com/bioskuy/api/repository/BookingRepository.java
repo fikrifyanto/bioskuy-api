@@ -38,4 +38,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      */
     List<Booking> findByPaymentStatus(PaymentStatus paymentStatus);
 
+    void deleteByBookingId(Long id);
 }
