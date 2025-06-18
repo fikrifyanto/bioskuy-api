@@ -1,11 +1,10 @@
 package com.bioskuy.api.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bioskuy.api.model.Movie;
 import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.repository.ScheduleRepository;
@@ -19,16 +18,25 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public List<Schedule> getAllSchedule(){
-        return scheduleRepository.findAll();
+    /**
+     * Get all schedules with pagination
+     * 
+     * @param pageable pagination information
+     * @return Page of schedules
+     */
+    public Page<Schedule> getAllSchedule(Pageable pageable){
+        return scheduleRepository.findAll(pageable);
     }
 
-    public List<Schedule> getAllSchedulebyMovie(Movie movie){
-        return scheduleRepository.findScheduleByMovie(movie);
-    }
-
-    public List<Schedule> getAllSchedulebyTheater(Theater theater){
-        return scheduleRepository.findScheduleByTheater(theater);
+    /**
+     * Get all schedules for a specific theater with pagination
+     * 
+     * @param theater the theater to get schedules for
+     * @param pageable pagination information
+     * @return Page of schedules for the specified theater
+     */
+    public Page<Schedule> getAllSchedulebyTheater(Theater theater, Pageable pageable){
+        return scheduleRepository.findScheduleByTheater(theater, pageable);
     }
 
 }

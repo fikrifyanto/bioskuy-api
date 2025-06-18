@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -81,6 +82,21 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> apiResponse = ResponseUtil.error(
                 "Invalid input: " + ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles ResponseStatusException - thrown when a specific HTTP status code
+     * needs to be returned with a reason.
+     * This preserves the status code and reason from the original exception.
+     *
+     * @param ex The ResponseStatusException that was thrown
+     * @return A ResponseEntity with the original status code and reason
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ApiResponse<Object>> handleResponseStatusException(
+            ResponseStatusException ex) {
+        ApiResponse<Object> apiResponse = ResponseUtil.error(ex.getReason());
+        return new ResponseEntity<>(apiResponse, ex.getStatusCode());
     }
 
     /**

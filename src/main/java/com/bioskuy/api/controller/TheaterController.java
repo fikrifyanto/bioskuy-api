@@ -1,72 +1,84 @@
 package com.bioskuy.api.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
 import com.bioskuy.api.model.Movie;
-import com.bioskuy.api.model.Schedule;
 import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.service.MovieService;
-import com.bioskuy.api.service.ScheduleService;
 import com.bioskuy.api.service.TheaterService;
 
 @RestController
-@RequestMapping("/theater")
+@RequestMapping("/theaters")
 public class TheaterController {
     private final MovieService movieService;
     private final TheaterService theaterService;
-    private final ScheduleService scheduleService;
 
     @Autowired
-    public TheaterController(TheaterService theaterService, ScheduleService scheduleService, MovieService movieService) {
+    public TheaterController(TheaterService theaterService, MovieService movieService) {
         this.movieService = movieService;
         this.theaterService = theaterService;
-        this.scheduleService = scheduleService;
     }
 
+    /**
+     * Get all theaters with pagination
+     *
+     * @param page      Page number (0-based)
+     * @param size      Page size
+     * @param sortBy    Field to sort by (default: "id")
+     * @param direction Sort direction (default: "asc")
+     * @return ResponseEntity with ApiResponse containing the page of theaters
+     */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Theater>>> getAllTheater(){
-        List<Theater> theaters = theaterService.getAllTheater();
-        return ResponseEntity.ok(ResponseUtil.success("Retreived " + theaters.size() + " Theater(s)", theaters));
+    public ResponseEntity<ApiResponse<?>> getAllTheaters(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc") ?
+                Sort.by(sortBy).descending() :
+                Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Theater> theaterPage = theaterService.getTheatersPaginated(pageable);
+
+        return ResponseEntity.ok(ResponseUtil.success(
+                "Retrieved " + theaterPage.getNumberOfElements() + " Theater(s) (Page " + (page + 1) + " of " + theaterPage.getTotalPages() + ")",
+                theaterPage));
     }
 
+    /**
+     * Get theaters showing a specific movie
+     *
+     * @param id The ID of the movie
+     * @return ResponseEntity with ApiResponse containing the list of theaters showing the movie
+     */
     @GetMapping("/movie/{id}")
-    public ResponseEntity<ApiResponse<List<Theater>>> getTheatersfromMovie(@PathVariable Long id){
-        Set<Theater> theaters = new HashSet<>();
-        Theater theater;
-        Movie movie = movieService.getMoviebyId(id);
+    public ResponseEntity<ApiResponse<List<Theater>>> getTheatersByMovieId(@PathVariable Long id) {
+        // Check if a movie exists
+        Movie movie = movieService.getMovieById(id);
 
-        List<Schedule> movieSchedule = scheduleService.getAllSchedulebyMovie(movie);
+        // Get theaters showing the movie
+        List<Theater> theaters = theaterService.getTheatersByMovieId(id);
 
-        for(Schedule show : movieSchedule){
-            try {
-                theater = theaterService.getTheaterbyId(show.getTheater().getTheater_id());
-                theaters.add(theater);
-            } catch (IllegalArgumentException e) {
-                if (e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseUtil.error(e.getMessage()));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ResponseUtil.error("Invalid input: " + e.getMessage()));
-            }
-            }
+        if (theaters.isEmpty()) {
+            return ResponseEntity.ok(ResponseUtil.success("No theaters found showing movie: " + movie.getTitle(), theaters));
         }
 
-        List<Theater> theaterList = new ArrayList<>(theaters);
-
-        return ResponseEntity.ok(ResponseUtil.success("Retreived " + theaterList.size() + " Theater(s) with Movie id " + id, theaterList));
+        return ResponseEntity.ok(ResponseUtil.success("Found " + theaters.size() + " theater(s) showing movie: " + movie.getTitle(), theaters));
     }
 }

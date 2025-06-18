@@ -1,37 +1,36 @@
 package com.bioskuy.api.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.bioskuy.api.model.Movie;
 
+/**
+ * Repository for Movie entities
+ */
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     /**
-     * @param id Movie id
-     * @return Optional containing Movie based on id if exist, empty otherwise
+     * Find movies by combined filters (title, genre, rating)
+     *
+     * @param title    part of the movie title (optional)
+     * @param genre    movie genre (optional)
+     * @param rating   movie rating (optional)
+     * @param pageable pagination information
+     * @return Page of movies matching all provided filters
      */
-    Optional<Movie> findMovieByMovieId(Long id);
-
-    /**
-     * @param title Movie title
-     * @return Optional containing Movie based on title if exist, empty otherwise
-     */
-    Optional<Movie> findMovieByTitle(String title);
-
-    /**
-     * @param genre movie genre
-     * @return List of movie based on genre if exist, empty list otherwise
-     */
-    List<Movie> findMovieByGenre(String genre);
-
-    /**
-     * @param rating movie rating
-     * @return List of movie based on rating if exist, empty list otherwise
-     */
-    List<Movie> findMovieByRating(double rating);
+    @Query("SELECT m FROM Movie m WHERE " +
+            "(:title IS NULL OR LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
+            "(:genre IS NULL OR m.genre = :genre) AND " +
+            "(:rating IS NULL OR m.rating = :rating)")
+    Page<Movie> findMoviesByFilters(
+            @Param("title") String title,
+            @Param("genre") String genre,
+            @Param("rating") Double rating,
+            Pageable pageable);
 }

@@ -1,14 +1,18 @@
 package com.bioskuy.api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
@@ -17,23 +21,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Movie {
     @Id
-    @Column(name = "movie_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long movieId;
+    private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "genre", nullable = false)
+    @Column(nullable = false)
     private String genre;
 
-    @Column(name = "duration", nullable = false)
+    @Column(nullable = false)
     private int duration;
 
-    @Column(name = "rating", nullable = false)
+    @Column(nullable = false)
     private double rating;
 
-    public Movie(String title, String genre, int duration, double rating){
+    @OneToMany(mappedBy = "movie")
+    @JsonManagedReference
+    private List<Schedule> schedules;
+
+    public Movie(String title, String genre, int duration, double rating) {
         this.title = title;
         this.genre = genre;
         this.duration = duration;
