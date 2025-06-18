@@ -30,6 +30,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @return List of booking by payment status if existed, empty list otherwise
      */
     List<Booking> findByStatus(BookingStatus bookingStatus);
-
-    void deleteByBookingId(Long id);
 }
