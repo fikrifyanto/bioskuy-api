@@ -2,6 +2,8 @@ package com.bioskuy.api.controller;
 
 import java.util.List;
 
+import com.bioskuy.api.model.movie.MovieResponse;
+import com.bioskuy.api.model.theater.TheaterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
-import com.bioskuy.api.model.Movie;
-import com.bioskuy.api.model.Theater;
 import com.bioskuy.api.service.MovieService;
 import com.bioskuy.api.service.TheaterService;
 
@@ -54,7 +54,7 @@ public class TheaterController {
                 Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Theater> theaterPage = theaterService.getTheatersPaginated(pageable);
+        Page<TheaterResponse> theaterPage = theaterService.getTheatersPaginated(pageable);
 
         return ResponseEntity.ok(ResponseUtil.success(
                 "Retrieved " + theaterPage.getNumberOfElements() + " Theater(s) (Page " + (page + 1) + " of " + theaterPage.getTotalPages() + ")",
@@ -68,12 +68,12 @@ public class TheaterController {
      * @return ResponseEntity with ApiResponse containing the list of theaters showing the movie
      */
     @GetMapping("/movie/{id}")
-    public ResponseEntity<ApiResponse<List<Theater>>> getTheatersByMovieId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<TheaterResponse>>> getTheatersByMovieId(@PathVariable Long id) {
         // Check if a movie exists
-        Movie movie = movieService.getMovieById(id);
+        MovieResponse movie = movieService.getMovieById(id);
 
         // Get theaters showing the movie
-        List<Theater> theaters = theaterService.getTheatersByMovieId(id);
+        List<TheaterResponse> theaters = theaterService.getTheatersByMovieId(id);
 
         if (theaters.isEmpty()) {
             return ResponseEntity.ok(ResponseUtil.success("No theaters found showing movie: " + movie.getTitle(), theaters));

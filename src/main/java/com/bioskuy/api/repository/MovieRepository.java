@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.bioskuy.api.model.Movie;
+import com.bioskuy.api.entity.Movie;
 
 /**
  * Repository for Movie entities
