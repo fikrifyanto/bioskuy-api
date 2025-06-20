@@ -15,5 +15,7 @@ public class MovieResponse {
 
     private Float rating;
 
+    private String image;
+
     private Integer duration;
 }

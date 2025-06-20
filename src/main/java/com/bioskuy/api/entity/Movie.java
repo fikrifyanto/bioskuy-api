@@ -32,6 +32,9 @@ public class Movie extends BaseEntity{
 
     private Float rating;
 
+    @Column(nullable = false)
+    private String image;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
 }
