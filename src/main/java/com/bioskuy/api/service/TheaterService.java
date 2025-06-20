@@ -16,7 +16,7 @@ import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.TheaterRepository;
 
 @Service
-public class TheaterService {
+public class TheaterService implements TheaterServiceInterface {
     private final TheaterRepository theaterRepository;
     private final ScheduleRepository scheduleRepository;
 

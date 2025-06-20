@@ -13,7 +13,7 @@ import com.bioskuy.api.entity.Ticket;
 import com.bioskuy.api.repository.TicketRepository;
 
 @Service
-public class TicketService {
+public class TicketService implements TicketServiceInterface {
 
     private final TicketRepository ticketRepository;
 

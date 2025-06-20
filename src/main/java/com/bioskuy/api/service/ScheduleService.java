@@ -16,7 +16,7 @@ import com.bioskuy.api.entity.Schedule;
 import com.bioskuy.api.repository.ScheduleRepository;
 
 @Service
-public class ScheduleService {
+public class ScheduleService implements ScheduleServiceInterface {
 
     private final ScheduleRepository scheduleRepository;
 

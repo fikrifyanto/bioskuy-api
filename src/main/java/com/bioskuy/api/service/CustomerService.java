@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Service class for handling user-related business logic.
  */
 @Service
-public class CustomerService {
+public class CustomerService implements CustomerServiceInterface{
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
 

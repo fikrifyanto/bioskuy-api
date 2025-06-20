@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class MidtransService {
+public class MidtransService implements MidtransServiceInterface {
 
     private final MidtransSnapApi snapApi;
 

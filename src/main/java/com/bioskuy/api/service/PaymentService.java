@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 
 @Service
-public class PaymentService {
+public class PaymentService implements PaymentServiceInterface {
 
     private final MidtransService midtransService;
 

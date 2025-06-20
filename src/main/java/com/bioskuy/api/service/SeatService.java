@@ -15,7 +15,7 @@ import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.SeatRepository;
 
 @Service
-public class SeatService {
+public class SeatService implements  SeatServiceInterface{
     private final SeatRepository seatRepository;
     private final ScheduleRepository scheduleRepository;
 

@@ -15,7 +15,7 @@ import com.bioskuy.api.repository.MovieRepository;
  * Service for movie-related operations
  */
 @Service
-public class MovieService {
+public class MovieService implements MovieServiceInterface{
 
     private final MovieRepository movieRepository;
 

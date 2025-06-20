@@ -26,7 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.bioskuy.api.enums.SeatStatus;
 
 @Service
-public class BookingService {
+public class BookingService implements BookingServiceInterface{
     private final BookingRepository bookingRepository;
     private final CustomerRepository customerRepository;
     private final SeatRepository seatRepository;
@@ -173,4 +173,6 @@ public class BookingService {
                 .status(booking.getStatus())
                 .build();
     }
+
+
 }
