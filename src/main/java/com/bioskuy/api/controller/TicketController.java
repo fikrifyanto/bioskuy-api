@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
@@ -16,6 +13,7 @@ import com.bioskuy.api.entity.Ticket;
 import com.bioskuy.api.service.TicketService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/tickets")
 public class TicketController {
     private final TicketService ticketService;
