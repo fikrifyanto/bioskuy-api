@@ -59,6 +59,7 @@ public class MovieService implements MovieServiceInterface{
                 .genre(movie.getGenre())
                 .rating(movie.getRating())
                 .duration(movie.getDuration())
+                .image(movie.getImage())
                 .build();
     }
 }
