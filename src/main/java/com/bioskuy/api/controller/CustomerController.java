@@ -30,6 +30,7 @@ import java.util.Date;
  * Implements the User API as defined in the OpenAPI specification.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class CustomerController {
     private final CustomerService customerService;
