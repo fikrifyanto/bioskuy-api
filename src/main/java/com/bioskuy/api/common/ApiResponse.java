@@ -1,29 +1,19 @@
 package com.bioskuy.api.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Standard API response wrapper for all endpoints.
  * This class ensures that all API responses include a 'message' field
  * and wrap the actual response data under a 'data' field.
  */
-@Getter
-@Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ApiResponse<T> {
-    private String message;
-    private T data;
 
-    /**
-     * Constructor with message and data
-     * 
-     * @param message Response message
-     * @param data Response data
-     */
-    public ApiResponse(String message, T data) {
-        this.message = message;
-        this.data = data;
-    }
+    private String message;
+
+    private T data;
 }

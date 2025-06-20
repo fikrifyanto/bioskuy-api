@@ -1,5 +1,6 @@
 package com.bioskuy.api.service;
 
+import com.bioskuy.api.model.movie.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.bioskuy.api.model.Movie;
+import com.bioskuy.api.entity.Movie;
 import com.bioskuy.api.repository.MovieRepository;
 
 /**
@@ -30,9 +31,11 @@ public class MovieService {
      * @return Movie with the given ID
      * @throws ResponseStatusException if movie not found
      */
-    public Movie getMovieById(Long id) {
-        return movieRepository.findById(id)
+    public MovieResponse getMovieById(Long id) {
+        Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+
+        return toMovieResponse(movie);
     }
 
     /**
@@ -44,7 +47,18 @@ public class MovieService {
      * @param pageable pagination information
      * @return Page of movies matching all provided filters
      */
-    public Page<Movie> getMoviesByFilters(String title, String genre, Double rating, Pageable pageable) {
-        return movieRepository.findMoviesByFilters(title, genre, rating, pageable);
+    public Page<MovieResponse> getMoviesByFilters(String title, String genre, Double rating, Pageable pageable) {
+        return movieRepository.findMoviesByFilters(title, genre, rating, pageable)
+                .map(this::toMovieResponse);
+    }
+
+    public MovieResponse toMovieResponse(Movie movie) {
+        return MovieResponse.builder()
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .genre(movie.getGenre())
+                .rating(movie.getRating())
+                .duration(movie.getDuration())
+                .build();
     }
 }

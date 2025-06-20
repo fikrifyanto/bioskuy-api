@@ -4,18 +4,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.bioskuy.api.model.theater.TheaterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bioskuy.api.model.Schedule;
-import com.bioskuy.api.model.Theater;
+import com.bioskuy.api.entity.Schedule;
+import com.bioskuy.api.entity.Theater;
 import com.bioskuy.api.repository.ScheduleRepository;
 import com.bioskuy.api.repository.TheaterRepository;
 
 @Service
-public class TheaterService{
+public class TheaterService {
     private final TheaterRepository theaterRepository;
     private final ScheduleRepository scheduleRepository;
 
@@ -25,10 +26,13 @@ public class TheaterService{
         this.scheduleRepository = scheduleRepository;
     }
 
-    public Theater getTheaterbyId(Long id){
-        return theaterRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Theater not found"));
+    public TheaterResponse getTheaterbyId(Long id) {
+        Theater theater = theaterRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Theater not found"));
+
+        return toTheaterResponse(theater);
     }
+
 
     /**
      * Get theaters with pagination
@@ -36,8 +40,9 @@ public class TheaterService{
      * @param pageable pagination information
      * @return Page of theaters
      */
-    public Page<Theater> getTheatersPaginated(Pageable pageable) {
-        return theaterRepository.findAll(pageable);
+    public Page<TheaterResponse> getTheatersPaginated(Pageable pageable) {
+        return theaterRepository.findAll(pageable)
+                .map(this::toTheaterResponse);
     }
 
     /**
@@ -46,7 +51,7 @@ public class TheaterService{
      * @param movieId the ID of the movie
      * @return List of theaters showing the movie with their schedules for the movie
      */
-    public List<Theater> getTheatersByMovieId(Long movieId) {
+    public List<TheaterResponse> getTheatersByMovieId(Long movieId) {
         // Find all schedules for the movie
         List<Schedule> movieSchedules = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getMovie().getId().equals(movieId))
@@ -67,6 +72,17 @@ public class TheaterService{
             theater.setSchedules(theaterSchedulesForMovie);
         }
 
-        return theaters;
+        return theaters.stream()
+                .map(this::toTheaterResponse)
+                .toList();
+    }
+
+    public TheaterResponse toTheaterResponse(Theater theater) {
+        return TheaterResponse.builder()
+                .id(theater.getId())
+                .name(theater.getName())
+                .address(theater.getAddress())
+                .capacity(theater.getCapacity())
+                .build();
     }
 }

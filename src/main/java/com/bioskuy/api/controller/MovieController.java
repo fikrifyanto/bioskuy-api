@@ -1,26 +1,23 @@
 package com.bioskuy.api.controller;
 
+import com.bioskuy.api.model.movie.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bioskuy.api.common.ApiResponse;
 import com.bioskuy.api.common.ResponseUtil;
-import com.bioskuy.api.model.Movie;
 import com.bioskuy.api.service.MovieService;
 
 /**
  * Controller for movie-related endpoints.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/movies")
 public class MovieController {
     private final MovieService movieService;
@@ -60,9 +57,9 @@ public class MovieController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         // Apply filters
-        Page<Movie> moviePage = movieService.getMoviesByFilters(
-                (title != null && !title.isEmpty()) ? title : null,
-                (genre != null && !genre.isEmpty()) ? genre : null,
+        Page<MovieResponse> moviePage = movieService.getMoviesByFilters(
+                title,
+                genre,
                 rating,
                 pageable
         );
@@ -79,8 +76,8 @@ public class MovieController {
      * @return ResponseEntity with ApiResponse containing the movie
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Movie>> getMovieById(@PathVariable Long id) {
-        Movie movie = movieService.getMovieById(id);
+    public ResponseEntity<ApiResponse<MovieResponse>> getMovieById(@PathVariable Long id) {
+        MovieResponse movie = movieService.getMovieById(id);
         return ResponseEntity.ok(ResponseUtil.success("Found movie with ID " + id, movie));
     }
 }
