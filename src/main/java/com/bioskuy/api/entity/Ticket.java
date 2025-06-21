@@ -19,6 +19,9 @@ public class Ticket extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "ticket_number", nullable = false)
+    private String ticketNumber;
+
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
