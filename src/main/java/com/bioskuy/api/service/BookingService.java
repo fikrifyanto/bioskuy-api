@@ -182,8 +182,6 @@ public class BookingService implements BookingServiceInterface{
                 .map(ticket -> TicketResponse.builder()
                         .id(ticket.getId())
                         .ticketNumber(ticket.getTicketNumber())
-                        .seat(ticket.getSeat())
-                        .bookingSeat(ticket.getBookingSeat())
                         .build())
                 .toList();
 

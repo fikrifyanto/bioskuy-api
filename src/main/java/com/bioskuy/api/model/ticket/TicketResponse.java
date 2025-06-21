@@ -18,8 +18,4 @@ public class TicketResponse {
     private String ticketNumber;
 
     private Booking booking;
-
-    private Seat seat;
-
-    private BookingSeat bookingSeat;
 }
