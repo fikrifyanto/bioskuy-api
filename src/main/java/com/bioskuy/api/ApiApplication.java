@@ -1,6 +1,5 @@
 package com.bioskuy.api;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -13,12 +12,9 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 public class ApiApplication {
 
-	@PostConstruct
-	void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jakarta"));
-	}
-
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+07:00"));
+
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
