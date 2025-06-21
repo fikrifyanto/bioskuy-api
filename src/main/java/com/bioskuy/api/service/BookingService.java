@@ -178,12 +178,14 @@ public class BookingService implements BookingServiceInterface{
                         .build())
                 .toList();
 
-        List<TicketResponse> ticketResponses = booking.getTickets().stream()
+        List<TicketResponse> ticketResponses = booking.getTickets() != null
+                ? booking.getTickets().stream()
                 .map(ticket -> TicketResponse.builder()
                         .id(ticket.getId())
                         .ticketNumber(ticket.getTicketNumber())
                         .build())
-                .toList();
+                .toList()
+                : List.of();
 
         return BookingResponse.builder()
                 .id(booking.getId())
