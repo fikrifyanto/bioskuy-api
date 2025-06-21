@@ -1,11 +1,9 @@
 package com.bioskuy.api.controller;
 
+import com.bioskuy.api.model.payment.PaymentRequest;
 import com.bioskuy.api.service.PaymentService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -19,7 +17,7 @@ public class PaymentController {
     }
 
     @PostMapping("/notification")
-    public ResponseEntity<String> handleNotification(HttpServletRequest request) throws IOException {
+    public ResponseEntity<String> handleNotification(@RequestBody PaymentRequest request) {
         this.paymentService.verifyPayment(request);
 
         return ResponseEntity.ok("Notification processed");
