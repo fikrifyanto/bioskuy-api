@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +50,6 @@ public class MidtransService implements MidtransServiceInterface {
         params.put("customer_details", customerDetails);
 
         Map<String, Object> customExpiry = new HashMap<>();
-        customExpiry.put("start_time", LocalDateTime.now());
         customExpiry.put("duration", 15);
         customExpiry.put("unit", "minute");
         params.put("custom_expiry", customExpiry);
