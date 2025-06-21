@@ -1,8 +1,6 @@
 package com.bioskuy.api.model.ticket;
 
 import com.bioskuy.api.entity.Booking;
-import com.bioskuy.api.entity.BookingSeat;
-import com.bioskuy.api.entity.Seat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
