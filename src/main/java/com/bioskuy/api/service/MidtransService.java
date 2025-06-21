@@ -54,6 +54,8 @@ public class MidtransService implements MidtransServiceInterface {
         customExpiry.put("unit", "minute");
         params.put("custom_expiry", customExpiry);
 
+        System.out.println("Midtrans params: " + params);
+
         JSONObject response = snapApi.createTransaction(params);
 
         String token = response.getString("token");
