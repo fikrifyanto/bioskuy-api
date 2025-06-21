@@ -153,6 +153,7 @@ public class BookingService implements BookingServiceInterface{
                 .genre(booking.getSchedule().getMovie().getGenre())
                 .duration(booking.getSchedule().getMovie().getDuration())
                 .rating(booking.getSchedule().getMovie().getRating())
+                .image(booking.getSchedule().getMovie().getImage())
                 .build();
 
         TheaterResponse theater = TheaterResponse.builder()
