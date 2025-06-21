@@ -13,6 +13,8 @@ import com.bioskuy.api.model.booking.BookingRequest;
 import com.bioskuy.api.model.booking.BookingResponse;
 import com.bioskuy.api.service.BookingService;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/bookings")
@@ -25,10 +27,18 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    /**
-     * @param bookingRequest The booking request DTO containing scheduleId and selected seat IDs
-     * @return ResponseEntity with ApiResponse containing the created Booking as a DTO
-     */
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<BookingResponse>>> getAllBookings() {
+        try {
+            List<BookingResponse> bookings = bookingService.getAllBookings();
+            return ResponseEntity.ok(ResponseUtil.success("Bookings retrieved successfully", bookings));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("Failed to retrieve bookings: " + e.getMessage()));
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentResponse>> createBooking(@RequestBody BookingRequest bookingRequest) {
         try {
@@ -42,10 +52,6 @@ public class BookingController {
         }
     }
 
-    /**
-     * @param id The unique identifier of the booking to retrieve
-     * @return ResponseEntity with ApiResponse containing the BookingResponseDTO with certain id
-     */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BookingResponse>> showBooking(@PathVariable Long id) {
         try {
@@ -57,12 +63,6 @@ public class BookingController {
         }
     }
 
-    /**
-     * @param id The unique identifier of the booking to cancel
-     * @return {@code 200 OK} with the updated booking if the booking was successfully cancelled,
-     *         {@code 409 Conflict} if the booking has already been paid,
-     *         or {@code 404 Not Found} if the booking does not exist
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<BookingResponse>> cancelBooking(@PathVariable Long id) {
         try {

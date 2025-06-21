@@ -14,6 +14,7 @@ import com.bioskuy.api.model.movie.MovieResponse;
 import com.bioskuy.api.model.payment.PaymentResponse;
 import com.bioskuy.api.model.schedule.ScheduleResponse;
 import com.bioskuy.api.model.theater.TheaterResponse;
+import com.bioskuy.api.model.ticket.TicketResponse;
 import com.bioskuy.api.repository.*;
 import com.midtrans.httpclient.error.MidtransError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,19 @@ public class BookingService implements BookingServiceInterface{
 
         return toBookingResponse(booking);
     }
+
+    public List<BookingResponse> getAllBookings() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found with email: " + email));
+
+        List<Booking> bookings = bookingRepository.findAllByCustomerAndStatus(customer, BookingStatus.PAID);
+
+        return bookings.stream()
+                .map(this::toBookingResponse)
+                .toList();
+    }
+
 
     @Transactional
     public PaymentResponse createBooking(BookingRequest bookingRequest) throws MidtransError {
@@ -164,12 +178,22 @@ public class BookingService implements BookingServiceInterface{
                         .build())
                 .toList();
 
+        List<TicketResponse> ticketResponses = booking.getTickets().stream()
+                .map(ticket -> TicketResponse.builder()
+                        .id(ticket.getId())
+                        .ticketNumber(ticket.getTicketNumber())
+                        .seat(ticket.getSeat())
+                        .bookingSeat(ticket.getBookingSeat())
+                        .build())
+                .toList();
+
         return BookingResponse.builder()
                 .id(booking.getId())
                 .amount(booking.getAmount())
                 .customer(customerResponse)
                 .schedule(scheduleResponse)
                 .bookingSeats(bookingSeatResponses)
+                .tickets(ticketResponses)
                 .status(booking.getStatus())
                 .build();
     }

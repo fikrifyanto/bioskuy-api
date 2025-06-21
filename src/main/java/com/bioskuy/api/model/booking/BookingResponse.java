@@ -2,11 +2,11 @@ package com.bioskuy.api.model.booking;
 
 import java.util.List;
 
-import com.bioskuy.api.entity.*;
 import com.bioskuy.api.enums.BookingStatus;
 import com.bioskuy.api.model.bookingSeats.BookingSeatResponse;
 import com.bioskuy.api.model.customer.CustomerResponse;
 import com.bioskuy.api.model.schedule.ScheduleResponse;
+import com.bioskuy.api.model.ticket.TicketResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +34,5 @@ public class BookingResponse {
 
     private List<BookingSeatResponse> bookingSeats;
 
-    private List<Ticket> tickets;
+    private List<TicketResponse> tickets;
 }
