@@ -1,5 +1,6 @@
 package com.bioskuy.api.service;
 
+import com.bioskuy.api.entity.Schedule;
 import com.bioskuy.api.model.schedule.ScheduleResponse;
 import org.springframework.data.domain.Page;
 
@@ -13,4 +14,6 @@ public interface ScheduleServiceInterface {
             String sortBy,
             String direction
     );
+
+    ScheduleResponse toScheduleResponse(Schedule schedule);
 }

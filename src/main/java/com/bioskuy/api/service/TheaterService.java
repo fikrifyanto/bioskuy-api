@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.bioskuy.api.model.schedule.ScheduleResponse;
 import com.bioskuy.api.model.theater.TheaterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,12 +78,26 @@ public class TheaterService implements TheaterServiceInterface {
                 .toList();
     }
 
+    public ScheduleResponse toScheduleResponse(Schedule schedule){
+        return ScheduleResponse.builder()
+                .id(schedule.getId())
+                .startTime(schedule.getStartTime())
+                .endTime(schedule.getEndTime())
+                .price(schedule.getPrice())
+                .build();
+    }
+
     public TheaterResponse toTheaterResponse(Theater theater) {
+        List<ScheduleResponse> schedules = theater.getSchedules().stream()
+                .map(this::toScheduleResponse)
+                .toList();
+
         return TheaterResponse.builder()
                 .id(theater.getId())
                 .name(theater.getName())
                 .address(theater.getAddress())
                 .capacity(theater.getCapacity())
+                .schedules(schedules)
                 .build();
     }
 }
