@@ -49,10 +49,11 @@ public class MidtransService implements MidtransServiceInterface {
         customerDetails.put("email", email);
         params.put("customer_details", customerDetails);
 
-        Map<String, Object> customExpiry = new HashMap<>();
-        customExpiry.put("duration", 15);
-        customExpiry.put("unit", "minute");
-        params.put("custom_expiry", customExpiry);
+        Map<String, Object> expiry = new HashMap<>();
+        expiry.put("duration", 15);
+        expiry.put("unit", "minute");
+        params.put("expiry", expiry);
+        params.put("page_expiry", expiry);
 
         System.out.println("Midtrans params: " + params);
 
