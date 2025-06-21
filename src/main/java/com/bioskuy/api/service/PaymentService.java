@@ -63,37 +63,39 @@ public class PaymentService implements PaymentServiceInterface {
 
         JsonNode payload = objectMapper.readTree(request.getInputStream());
 
-        String orderId = payload.get("order_id").asText();
-        String statusCode = payload.get("status_code").asText();
-        String grossAmount = payload.get("gross_amount").asText();
-        String signatureKey = payload.get("signature_key").asText();
-        String transactionStatus = payload.get("transaction_status").asText();
+        System.out.println("Parsed Midtrans payload: " + payload.toString());
 
-        String dataToHash = orderId + statusCode + grossAmount + serverKey;
-        String generatedSignature = sha512(dataToHash);
-
-        if (!generatedSignature.equals(signatureKey)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Signature");
-        }
-
-        Booking booking = bookingRepository.findById(Long.valueOf(orderId))
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-
-        switch (transactionStatus) {
-            case "settlement", "capture" -> booking.setStatus(BookingStatus.PAID);
-            case "pending" -> booking.setStatus(BookingStatus.PENDING);
-            case "deny", "cancel", "expire", "failure" -> booking.setStatus(BookingStatus.CANCELLED);
-        }
-
-        bookingRepository.save(booking);
-
-        switch (transactionStatus) {
-            case "settlement", "capture" -> booking.getPayment().setStatus(PaymentStatus.PAID);
-            case "pending" -> booking.getPayment().setStatus(PaymentStatus.PENDING);
-            case "deny", "cancel", "expire", "failure" -> booking.getPayment().setStatus(PaymentStatus.CANCELLED);
-        }
-
-        paymentRepository.save(booking.getPayment());
+//        String orderId = payload.get("order_id").asText();
+//        String statusCode = payload.get("status_code").asText();
+//        String grossAmount = payload.get("gross_amount").asText();
+//        String signatureKey = payload.get("signature_key").asText();
+//        String transactionStatus = payload.get("transaction_status").asText();
+//
+//        String dataToHash = orderId + statusCode + grossAmount + serverKey;
+//        String generatedSignature = sha512(dataToHash);
+//
+//        if (!generatedSignature.equals(signatureKey)) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Signature");
+//        }
+//
+//        Booking booking = bookingRepository.findById(Long.valueOf(orderId))
+//                .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+//
+//        switch (transactionStatus) {
+//            case "settlement", "capture" -> booking.setStatus(BookingStatus.PAID);
+//            case "pending" -> booking.setStatus(BookingStatus.PENDING);
+//            case "deny", "cancel", "expire", "failure" -> booking.setStatus(BookingStatus.CANCELLED);
+//        }
+//
+//        bookingRepository.save(booking);
+//
+//        switch (transactionStatus) {
+//            case "settlement", "capture" -> booking.getPayment().setStatus(PaymentStatus.PAID);
+//            case "pending" -> booking.getPayment().setStatus(PaymentStatus.PENDING);
+//            case "deny", "cancel", "expire", "failure" -> booking.getPayment().setStatus(PaymentStatus.CANCELLED);
+//        }
+//
+//        paymentRepository.save(booking.getPayment());
     }
 
 
