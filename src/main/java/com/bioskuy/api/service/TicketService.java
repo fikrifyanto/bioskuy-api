@@ -48,6 +48,7 @@ public class TicketService implements TicketServiceInterface {
         SeatResponse seat = SeatResponse.builder()
                 .id(ticket.getSeat().getId())
                 .seatNumber(ticket.getSeat().getSeatNumber())
+                .status(ticket.getSeat().getStatus())
                 .build();
 
         return TicketBookingResponse.builder()
