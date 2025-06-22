@@ -1,11 +1,11 @@
 package com.bioskuy.api.service;
 
-import com.bioskuy.api.model.ticket.TicketResponse;
+import com.bioskuy.api.model.ticket.TicketBookingResponse;
 
 import java.util.List;
 
 public interface TicketServiceInterface {
 
-    List<TicketResponse> getTicketsByBookingId(Long bookingId);
+    List<TicketBookingResponse> getTicketsByBookingId(Long bookingId);
 
 }

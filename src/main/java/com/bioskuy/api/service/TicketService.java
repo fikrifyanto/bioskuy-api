@@ -2,7 +2,7 @@ package com.bioskuy.api.service;
 
 import java.util.List;
 
-import com.bioskuy.api.model.ticket.TicketResponse;
+import com.bioskuy.api.model.ticket.TicketBookingResponse;
 import com.bioskuy.api.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class TicketService implements TicketServiceInterface {
         this.bookingRepository = bookingRepository;
     }
 
-    public List<TicketResponse> getTicketsByBookingId(Long bookingId) {
+    public List<TicketBookingResponse> getTicketsByBookingId(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
 
@@ -39,14 +39,15 @@ public class TicketService implements TicketServiceInterface {
         }
 
         return tickets.stream()
-                .map(this::toTicketResponse)
+                .map(this::toTicketBookingResponse)
                 .toList();
     }
 
-    public TicketResponse toTicketResponse(Ticket ticket) {
-        return TicketResponse.builder()
+    public TicketBookingResponse toTicketBookingResponse(Ticket ticket) {
+        return TicketBookingResponse.builder()
                 .id(ticket.getId())
                 .ticketNumber(ticket.getTicketNumber())
+                .seat(ticket.getSeat())
                 .build();
     }
 }
