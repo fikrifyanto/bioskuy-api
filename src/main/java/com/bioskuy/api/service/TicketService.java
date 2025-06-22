@@ -2,6 +2,7 @@ package com.bioskuy.api.service;
 
 import java.util.List;
 
+import com.bioskuy.api.model.seat.SeatResponse;
 import com.bioskuy.api.model.ticket.TicketBookingResponse;
 import com.bioskuy.api.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +45,15 @@ public class TicketService implements TicketServiceInterface {
     }
 
     public TicketBookingResponse toTicketBookingResponse(Ticket ticket) {
+        SeatResponse seat = SeatResponse.builder()
+                .id(ticket.getSeat().getId())
+                .seatNumber(ticket.getSeat().getSeatNumber())
+                .build();
+
         return TicketBookingResponse.builder()
                 .id(ticket.getId())
                 .ticketNumber(ticket.getTicketNumber())
-                .seat(ticket.getSeat())
+                .seat(seat)
                 .build();
     }
 }

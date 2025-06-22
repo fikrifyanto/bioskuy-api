@@ -1,6 +1,6 @@
 package com.bioskuy.api.model.ticket;
 
-import com.bioskuy.api.entity.Seat;
+import com.bioskuy.api.model.seat.SeatResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +15,5 @@ public class TicketBookingResponse {
 
     private String ticketNumber;
 
-    private Seat seat;
+    private SeatResponse seat;
 }
