@@ -1,8 +1,9 @@
 package com.bioskuy.api.service;
 
 import java.util.List;
-import java.util.UUID;
 
+import com.bioskuy.api.model.ticket.TicketResponse;
+import com.bioskuy.api.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,29 +18,35 @@ public class TicketService implements TicketServiceInterface {
 
     private final TicketRepository ticketRepository;
 
+    private final BookingRepository bookingRepository;
+
     @Autowired
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(
+            TicketRepository ticketRepository,
+            BookingRepository bookingRepository
+    ) {
         this.ticketRepository = ticketRepository;
+        this.bookingRepository = bookingRepository;
     }
 
-    public List<Ticket> getAllTickets(){
-        List<Ticket> tickets = ticketRepository.findAll();
-        return tickets;
+    public List<TicketResponse> getTicketsByBookingId(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        List<Ticket> tickets = ticketRepository.findByBooking(booking);
+        if (tickets.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No tickets found for booking ID: " + bookingId);
+        }
+
+        return tickets.stream()
+                .map(this::toTicketResponse)
+                .toList();
     }
 
-    public Ticket getTicketbyId(Long id){
-        Ticket ticket = ticketRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Ticket not found"));
-        return ticket;
-    }
-
-    public Ticket createTicket(Booking booking) {
-        Ticket ticket = new Ticket();
-        ticket.setBooking(booking);
-        return ticketRepository.save(ticket);
-    }
-
-    private String generateUniqueCode() {
-        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    public TicketResponse toTicketResponse(Ticket ticket) {
+        return TicketResponse.builder()
+                .id(ticket.getId())
+                .ticketNumber(ticket.getTicketNumber())
+                .build();
     }
 }

@@ -1,12 +1,11 @@
 package com.bioskuy.api.service;
 
-import com.bioskuy.api.entity.Booking;
-import com.bioskuy.api.entity.Ticket;
+import com.bioskuy.api.model.ticket.TicketResponse;
 
 import java.util.List;
 
 public interface TicketServiceInterface {
-    List<Ticket> getAllTickets();
-    Ticket getTicketbyId(Long id);
-    Ticket createTicket(Booking booking);
+
+    List<TicketResponse> getTicketsByBookingId(Long bookingId);
+
 }
