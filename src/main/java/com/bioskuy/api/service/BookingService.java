@@ -74,8 +74,7 @@ public class BookingService implements BookingServiceInterface{
                 .toList();
     }
 
-
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public PaymentResponse createBooking(BookingRequest bookingRequest) throws MidtransError {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByEmail(email)
