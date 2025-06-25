@@ -1,107 +1,116 @@
 @startuml
+!define ENTITY(name) class name << (E,orchid) >>
+!define ENUM(name) enum name << (E,orange) >>
 
-skinparam classAttributeIconSize 0
-skinparam classStereotypeFontSize 8
-skinparam classStereotypeFontStyle bold
-
-class User {
-  - id: Long
-  - name: String
-  - email: String
-  - password: String
-  - phoneNumber: String
-  + register()
-  + login()
-  + logout()
-  + viewProfile()
-  + updateProfile()
+ENTITY(BaseEntity) {
+    + LocalDateTime createdAt
+    + LocalDateTime updatedAt
 }
 
-class Movie {
-  - id: Long
-  - title: String
-  - genre: String
-  - duration: int
-  - rating: double
-  + viewDetails()
+ENTITY(Booking) {
+    + Long id
+    + Double amount
+    + BookingStatus status
 }
 
-class ShowingSchedule {
-  - id: Long
-  - movie: Movie
-  - theater: Theater
-  - showingDate: LocalDate
-  - showingTime: LocalTime
-  - ticketPrice: double
-  + viewSchedule()
+ENTITY(BookingSeat) {
+    + Long id
 }
 
-class Theater {
-  - id: Long
-  - name: String
-  - location: String
-  + viewDetails()
+ENTITY(Customer) {
+    + Long id
+    + String name
+    + String email
+    + String password
 }
 
-class Seat {
-  - id: Long
-  - booking_id: Long
-  - seatNumber: String
-  - status: SeatStatus
+ENTITY(Movie) {
+    + Long id
+    + String title
+    + String genre
+    + Integer duration
+    + Float rating
+    + String image
 }
 
-enum SeatStatus {
-  AVAILABLE
-  RESERVED
-  SOLD
+ENTITY(Payment) {
+    + Long id
+    + String token
+    + Double amount
+    + PaymentStatus status
 }
 
-class Booking {
-  - id: Long
-  - user: User
-  - showingSchedule: ShowingSchedule
-  - selectedSeats: List<Seat>
-  - bookingDateTime: LocalDateTime
-  - totalPrice: double
-  - paymentStatus: PaymentStatus
-  + createBooking()
-  + viewBookingDetails()
-  + cancelBooking()
+ENTITY(Schedule) {
+    + Long id
+    + LocalDateTime startTime
+    + LocalDateTime endTime
+    + Float price
 }
 
-enum PaymentStatus {
-  PENDING
-  AWAITING_CONFIRMATION
-  PAID
-  CANCELLED
+ENTITY(Seat) {
+    + Long id
+    + String seatNumber
+    + SeatStatus status
 }
 
-class Payment {
-  - id: Long
-  - booking: Booking
-  - paymentMethod: String
-  - paymentDateTime: LocalDateTime
-  - amountPaid: double
-  - status: PaymentStatus
-  + processPayment()
-  + verifyPayment()
+ENTITY(Theater) {
+    + Long id
+    + String name
+    + String address
+    + Integer capacity
 }
 
-class Ticket {
-  - id: Long
-  - booking: Booking
-  - seat: Seat
-  - uniqueCode: String
-  + printTicket()
-  + scanTicket()
+ENTITY(Ticket) {
+    + Long id
+    + String ticketNumber
 }
 
-User "1" -- "*" Booking : creates
-Movie "1" -- "*" ShowingSchedule : has
-Theater "1" -- "*" ShowingSchedule : displays
-ShowingSchedule "1" -- "*" Booking : available for
-Booking "1" -- "*" Seat : includes
-Booking "1" -- "1" Payment : associated with
-Booking "1" -- "*" Ticket : generates
-Seat "*" -- "1" Ticket : is on
+ENUM(BookingStatus) {
+    PENDING
+    PAID
+    CANCELLED
+}
+
+ENUM(PaymentStatus) {
+    PENDING
+    AWAITING_CONFIRMATION
+    PAID
+    CANCELLED
+}
+
+ENUM(SeatStatus) {
+    AVAILABLE
+    RESERVED
+    SOLD
+}
+
+' Inheritance'
+Booking --|> BaseEntity
+BookingSeat --|> BaseEntity
+Customer --|> BaseEntity
+Movie --|> BaseEntity
+Payment --|> BaseEntity
+Schedule --|> BaseEntity
+Seat --|> BaseEntity
+Theater --|> BaseEntity
+Ticket --|> BaseEntity
+
+' Relationships'
+Booking "1" -- "1" Payment : payment
+Booking "1" -- "N" BookingSeat : bookingSeats
+Booking "1" -- "N" Ticket : tickets
+Booking "N" -- "1" Customer : customer
+Booking "N" -- "1" Schedule : schedule
+
+BookingSeat "N" -- "1" Booking : booking
+BookingSeat "N" -- "1" Seat : seat
+
+Schedule "N" -- "1" Movie : movie
+Schedule "N" -- "1" Theater : theater
+Schedule "1" -- "N" Seat : seats
+
+Ticket "N" -- "1" Booking : booking
+Ticket "N" -- "1" Seat : seat
+Ticket "N" -- "1" BookingSeat : bookingSeat
+
 @enduml
